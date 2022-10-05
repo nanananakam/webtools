@@ -9,7 +9,7 @@ export default {
     titleTemplate: '%s - nanananakam-webtools',
     title: 'nanananakam-webtools',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'ja',
     },
     meta: [
       { charset: 'utf-8' },
@@ -35,6 +35,7 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -66,6 +67,12 @@ export default {
         },
       },
     },
+  },
+
+  moment: {
+    // configをここで設定可能
+    defaultLocale: 'ja',
+    locales: ['ja']
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
