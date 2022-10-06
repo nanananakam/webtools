@@ -8,7 +8,22 @@
         >
         </v-text-field>
       </v-form>
-      <div>{{toDateString}}</div>
+      <v-simple-table>
+        <tbody>
+          <tr>
+            <td>日付表記(環境依存)</td>
+            <td>{{dateString}}</td>
+          </tr>
+          <tr>
+            <td>ISO 8601</td>
+            <td>{{isoString}}</td>
+          </tr>
+          <tr>
+            <td>RFC 2822</td>
+            <td>{{rfcString}}</td>
+          </tr>
+        </tbody>
+      </v-simple-table>
     </v-col>
   </v-row>
 </template>
@@ -34,8 +49,17 @@ export default {
     }
   },
   computed: {
-    toDateString() {
-      return DateTime.fromSeconds(Number(this.form.input)).toLocaleString(DateTime.DATETIME_FULL);
+    luxonDateTime() {
+      return DateTime.fromSeconds(Number(this.form.input))
+    },
+    dateString() {
+      return this.luxonDateTime.toLocaleString(DateTime.DATETIME_FULL);
+    },
+    isoString() {
+      return this.luxonDateTime.toISO();
+    },
+    rfcString() {
+      return this.luxonDateTime.toRFC2822();
     }
   }
 }
