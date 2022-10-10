@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="6" lg="4" xl="3">
           <v-form>
-            <v-text-field v-model="inputValue"></v-text-field>
+            <v-text-field label="時刻" v-model="inputValue"></v-text-field>
           </v-form>
         </v-col>
         <v-spacer></v-spacer>
@@ -17,7 +17,7 @@
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="6" lg="4" xl="3">
           <v-form>
-            <v-select v-model="parseMode" :items="parseModeList" item-value="mode" item-text="modeString" return-object>
+            <v-select label="入力形式" v-model="parseMode" :items="parseModeList" item-value="mode" item-text="modeString" return-object>
             </v-select>
           </v-form>
         </v-col>
@@ -29,7 +29,7 @@
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="12" lg="9" xl="6">
           <v-form>
-            <v-autocomplete v-model="timeZoneString" :items="timeZoneList" item-value="timeZoneString" item-text="timeZoneDetailString">
+            <v-autocomplete label="TimeZone" v-model="timeZoneString" :items="timeZoneList" item-value="timeZoneString" item-text="timeZoneDetailString">
             </v-autocomplete>
           </v-form>
         </v-col>
@@ -179,7 +179,7 @@ Sun, 06 Nov 1994 08:49:37 GMT</pre></td>
             </tr>
             </tbody>
           </v-simple-table>
-          <div>自動判別の優先順位は　<code>UnixTime(秒)</code> > <code>SQL形式</code> > <code>ISO8601形式</code> > <code>RFC2822形式</code> > <code>HTTP(RFC 850/RFC 1123)形式</code>です</div>
+          <div>自動判別の優先順位は <code>UnixTime(秒)</code> > <code>SQL形式</code> > <code>ISO8601形式</code> > <code>RFC2822形式</code> > <code>HTTP(RFC 850/RFC 1123)形式</code>です</div>
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
