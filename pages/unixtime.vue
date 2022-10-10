@@ -4,9 +4,6 @@
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-          <!-- admax -->
-          <script src="https://adm.shinobi.jp/s/d104b256d34977705a688c597102d559"></script>
-          <!-- admax -->
           <h1>UnixTime便利ツール</h1>
           <div>UnixTimeを始めとした様々な形式で時刻を入力し、形式変換やTimeZone変更、加減算ができます。</div>
         </v-col>
