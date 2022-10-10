@@ -64,24 +64,28 @@ export default Vue.extend({
   data () {
     return {
       inputValue:DateTime.now().toFormat("X"),
+      timeZoneString:DateTime.now().zoneName,
     }
   },
   computed: {
     luxonDateTime(): DateTime | null {
       if (/^[0-9]+$/.exec(this.inputValue)){
-        return DateTime.fromSeconds(Number(this.inputValue));
+        const parsedAsUnix = DateTime.fromSeconds(Number(this.inputValue))
+        if (parsedAsUnix.isValid){
+          return DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString);
+        }
       }
       const parsedAsSQL = DateTime.fromSQL(this.inputValue);
       if (parsedAsSQL.isValid){
-        return parsedAsSQL
+        return parsedAsSQL.setZone(this.timeZoneString)
       }
       const parsedAsISO = DateTime.fromISO(this.inputValue);
       if (parsedAsISO.isValid){
-        return parsedAsISO;
+        return parsedAsISO.setZone(this.timeZoneString);
       }
       const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
       if (parsedAsRfc.isValid){
-        return parsedAsRfc;
+        return parsedAsRfc.setZone(this.timeZoneString);
       }
 
       return null;
@@ -92,12 +96,6 @@ export default Vue.extend({
       } else {
         return this.luxonDateTime.setZone('UTC');
       }
-    },
-    timeZoneString(): string {
-      if (this.luxonDateTime == null){
-        return "";
-      }
-      return this.luxonDateTime.zoneName;
     },
     dateString(): string {
       if (this.luxonDateTime == null){
