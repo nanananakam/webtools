@@ -16,10 +16,10 @@
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="6" lg="4" xl="3">
-        <v-form>
-          <v-select v-model="parseMode" :items="parseModeList" item-value="mode" item-text="modeString" return-object>
-          </v-select>
-        </v-form>
+          <v-form>
+            <v-select v-model="parseMode" :items="parseModeList" item-value="mode" item-text="modeString" return-object>
+            </v-select>
+          </v-form>
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
@@ -36,6 +36,23 @@
         <v-spacer></v-spacer>
       </v-row>
       <!-- select time zone end-->
+      <!-- time math button begin-->
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+          <div class="text-center">
+          <v-btn v-on:click="minusOneMonths" v-bind:disabled="luxonDateTime == null">-1ヶ月</v-btn>
+          <v-btn v-on:click="minusOneDay" v-bind:disabled="luxonDateTime == null">-1日</v-btn>
+          <v-btn v-on:click="minusOneHour" v-bind:disabled="luxonDateTime == null">-1時間</v-btn>
+          <v-btn v-on:click="setZeroZero" v-bind:disabled="luxonDateTime == null">00:00:00</v-btn>
+          <v-btn v-on:click="plusOneHour" v-bind:disabled="luxonDateTime == null">+1時間</v-btn>
+          <v-btn v-on:click="plusOneDay" v-bind:disabled="luxonDateTime == null">+1日</v-btn>
+          <v-btn v-on:click="plusOneMonths" v-bind:disabled="luxonDateTime == null">+1ヶ月</v-btn>
+          </div>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+      <!-- time math button end-->
       <!-- show parse result begin-->
       <v-row>
         <v-spacer></v-spacer>
@@ -346,7 +363,72 @@ export default Vue.extend({
 
       return result
     }
-  }
+  },
+  methods:{
+    plusOneHour: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.plus({hours:1}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    },
+    minusOneHour: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.minus({hours:1}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    },
+    plusOneDay: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.plus({days:1}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    },
+    minusOneDay: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.minus({days:1}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    },
+    plusOneMonths: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.plus({months:1}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    },
+    minusOneMonths: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.minus({months:1}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    },
+    setZeroZero: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.set({hour:0,minute:0,second:0}).toFormat("X");
+        this.parseMode = {
+          mode:"auto",
+          modeString:"自動"
+        };
+      }
+    }
+  },
 })
 </script>
 
