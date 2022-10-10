@@ -33,6 +33,17 @@
         </thead>
         <tbody>
           <tr>
+            <td>入力形式</td>
+            <td colspan="2">
+              <div v-if="resultParseMode == null">解析できませんでした</div>
+              <div v-if="resultParseMode === 'unix'">UnixTime</div>
+              <div v-if="resultParseMode === 'sql'">SQL形式</div>
+              <div v-if="resultParseMode === 'iso'">ISO8601形式</div>
+              <div v-if="resultParseMode === 'rfc'">RFC2822形式</div>
+            </td>
+          </tr>
+
+          <tr>
             <td>日時表記(環境依存)</td>
             <td>{{dateString}}</td>
             <td>{{utcDateString}}</td>
@@ -125,26 +136,26 @@ export default Vue.extend({
     }
   },
   computed: {
-    luxonDateTime(): DateTime | null {
+    parseResult(): {dateTime:DateTime, resultParseMode: PARSE_MODE} | null {
       switch(this.parseMode.mode){
         case "auto":
           if (/^[0-9]+$/.exec(this.inputValue)){
             const parsedAsUnix = DateTime.fromSeconds(Number(this.inputValue))
             if (parsedAsUnix.isValid){
-              return DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString);
+              return {dateTime: DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString), resultParseMode:"unix"};
             }
           } else {
             const parsedAsSQL = DateTime.fromSQL(this.inputValue);
             if (parsedAsSQL.isValid) {
-              return parsedAsSQL.setZone(this.timeZoneString)
+              return {dateTime:parsedAsSQL.setZone(this.timeZoneString), resultParseMode:"sql"}
             }
             const parsedAsISO = DateTime.fromISO(this.inputValue);
             if (parsedAsISO.isValid) {
-              return parsedAsISO.setZone(this.timeZoneString);
+              return {dateTime:parsedAsISO.setZone(this.timeZoneString), resultParseMode:"iso"};
             }
             const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
             if (parsedAsRfc.isValid) {
-              return parsedAsRfc.setZone(this.timeZoneString);
+              return {dateTime:parsedAsRfc.setZone(this.timeZoneString), resultParseMode:"rfc"};
             }
           }
           return null;
@@ -152,31 +163,45 @@ export default Vue.extend({
         case "unix":
           const parsedAsUnix = DateTime.fromSeconds(Number(this.inputValue))
           if (parsedAsUnix.isValid){
-            return DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString);
+            return {dateTime:DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString), resultParseMode:"unix"};
           }
           return null;
           //必ずreturnするのでbreak不要
         case "sql":
           const parsedAsSQL = DateTime.fromSQL(this.inputValue);
           if (parsedAsSQL.isValid) {
-            return parsedAsSQL.setZone(this.timeZoneString)
+            return {dateTime:parsedAsSQL.setZone(this.timeZoneString), resultParseMode:"sql"}
           }
           return null;
         //必ずreturnするのでbreak不要
         case "iso":
           const parsedAsISO = DateTime.fromISO(this.inputValue);
           if (parsedAsISO.isValid){
-            return parsedAsISO.setZone(this.timeZoneString);
+            return {dateTime:parsedAsISO.setZone(this.timeZoneString),resultParseMode:"iso"};
           }
           return null;
           //必ずreturnするのでbreak不要
         case "rfc":
           const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
           if (parsedAsRfc.isValid) {
-            return parsedAsRfc.setZone(this.timeZoneString);
+            return {dateTime:parsedAsRfc.setZone(this.timeZoneString), resultParseMode:"rfc"};
           }
           return null;
           //必ずreturnするのでbreak不要
+      }
+    },
+    resultParseMode(): PARSE_MODE | null {
+      if (this.parseResult == null) {
+        return null
+      } else {
+        return this.parseResult.resultParseMode
+      }
+    },
+    luxonDateTime(): DateTime | null {
+      if (this.parseResult == null) {
+        return null
+      } else {
+        return this.parseResult.dateTime;
       }
     },
     utcLuxonDateTime(): DateTime | null {
@@ -240,10 +265,11 @@ export default Vue.extend({
       }
       let isBeforeNow;
      //1秒未満を切り捨てるためにちょっと回りくどいことをしている
-      const now = DateTime.fromSeconds(Number(DateTime.now().toFormat("X")));
-      if ( this.luxonDateTime.equals(now)) {
+      const nowUnixTime = DateTime.now().toFormat("X");
+      if ( this.luxonDateTime.toFormat(("X")) === nowUnixTime) {
         return "0秒";
       }
+      const now = DateTime.fromSeconds(Number(nowUnixTime))
       if ( now > this.luxonDateTime ) {
         isBeforeNow = true;
       } else {
