@@ -44,7 +44,7 @@
       </v-container>
     </v-main>
     <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }} https://github.com/nanananakam</span>
+      <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam">nanananakam</a></span>
     </v-footer>
   </v-app>
 </template>
