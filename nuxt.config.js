@@ -35,6 +35,7 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    '@nuxtjs/google-gtag',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -56,6 +57,11 @@ export default {
     theme: {
       dark: false,
     },
+  },
+
+  "google-gtag": {
+    id: "G-BKHJMCZ8H1",
+    debug: true
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
