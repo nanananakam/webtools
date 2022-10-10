@@ -81,6 +81,11 @@ export default {
           title: 'Inspire',
           to: '/inspire',
         },
+        {
+          icon: 'mdi-clock-outline',
+          title: 'UnixTime便利ツール',
+          to: '/unixtime',
+        }
       ],
       miniVariant: false,
       right: true,
