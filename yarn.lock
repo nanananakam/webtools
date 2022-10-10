@@ -2427,6 +2427,11 @@
     lodash "^4.17.15"
     pretty "^2.0.0"
 
+"@vvo/tzdb@^6.71.0":
+  version "6.71.0"
+  resolved "https://registry.yarnpkg.com/@vvo/tzdb/-/tzdb-6.71.0.tgz#ebd0f7a65122e29400d9b6f02e64cd90c9b70343"
+  integrity sha512-x4t9XgMyjG3G1NhhIJQgzQgqM5ggmScM2YEFznQD+i/GA2qZEJ6lQTbEOhPg1NasEmoA3W4uwGz5m0ef72E1DA==
+
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"

@@ -1,6 +1,7 @@
 <template>
   <v-row>
     <v-col class="text-center">
+      <!-- input time begin-->
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="6" lg="4" xl="3">
@@ -10,6 +11,8 @@
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
+      <!-- input time end -->
+      <!-- select parse mode begin-->
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="6" lg="4" xl="3">
@@ -20,6 +23,20 @@
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
+      <!-- select parse mode end-->
+      <!-- select time zone begin-->
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+          <v-form>
+            <v-autocomplete v-model="timeZoneString" :items="timeZoneList" item-value="timeZoneString" item-text="timeZoneDetailString">
+            </v-autocomplete>
+          </v-form>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+      <!-- select time zone end-->
+      <!-- show parse result begin-->
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="12" lg="9" xl="6">
@@ -72,6 +89,7 @@
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
+      <!-- show parse result end-->
     </v-col>
   </v-row>
 </template>
@@ -79,6 +97,8 @@
 <script lang="ts">
 import {DateTime} from 'luxon';
 import Vue from "vue";
+
+import {getTimeZones} from "@vvo/tzdb";
 
 const PARSE_MODE = {
   auto: 'auto',
@@ -94,9 +114,15 @@ interface ParseModeSelectorElement {
   modeString: string,
 }
 
+interface TimeZoneElement {
+  timeZoneString: string,
+  timeZoneDetailString: string,
+}
+
 interface PageData {
   inputValue: string,
   timeZoneString: string,
+  timeZoneList: TimeZoneElement[],
   parseMode: ParseModeSelectorElement,
   parseModeList: ParseModeSelectorElement[],
 }
@@ -107,6 +133,14 @@ export default Vue.extend({
     return {
       inputValue:DateTime.now().toFormat("X"),
       timeZoneString:DateTime.now().zoneName,
+      timeZoneList: getTimeZones({ includeUtc: true }).map(
+        timeZone => {
+          return {
+            timeZoneString: timeZone.name,
+            timeZoneDetailString: timeZone.rawFormat+" ("+timeZone.name+", "+timeZone.abbreviation+")"
+          }
+        }
+      ),
       parseMode:{
           mode:"auto",
           modeString:"自動"
