@@ -1,10 +1,9 @@
 <template>
   <v-row>
     <v-col class="text-center">
-      <v-form ref="form">
+      <v-form>
         <v-text-field
-          v-model="form.input"
-          :rules="[rules.required]"
+          v-model="inputValue"
         >
         </v-text-field>
       </v-form>
@@ -33,9 +32,9 @@
             <td>{{utcRfcString}}</td>
           </tr>
           <tr>
-            <td>ハイフン区切り</td>
-            <td>{{hyphenSeparated}}</td>
-            <td>{{utcHyphenSeparated}}</td>
+            <td>SQL形式</td>
+            <td>{{sqlString}}</td>
+            <td>{{utcSqlString}}</td>
           </tr>
         <tr>
           <td>現在時刻との差</td>
@@ -47,66 +46,105 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
 import {DateTime} from 'luxon';
+import Vue from "vue";
 
-export default {
+export default Vue.extend({
   name: "unixtime",
-  mounted() {
-    // バリデーションをリセット
-    this.$refs.form.resetValidation()
-  },
   data () {
     return {
-      form: {
-        input:DateTime.now().toFormat("X"),
-      },
-      valid: true,
-      rules: {
-        required: value => !!value || '入力してください',
-      },
+      inputValue:DateTime.now().toFormat("X"),
     }
   },
   computed: {
-    luxonDateTime() {
-      return DateTime.fromSeconds(Number(this.form.input));
+    luxonDateTime(): DateTime | null {
+      if (/^[0-9]+$/.exec(this.inputValue)){
+        return DateTime.fromSeconds(Number(this.inputValue));
+      }
+      const parsedAsSQL = DateTime.fromSQL(this.inputValue);
+      if (parsedAsSQL.isValid){
+        return parsedAsSQL
+      }
+      const parsedAsISO = DateTime.fromISO(this.inputValue);
+      if (parsedAsISO.isValid){
+        return parsedAsISO;
+      }
+      const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
+      if (parsedAsRfc.isValid){
+        return parsedAsRfc;
+      }
+
+      return null;
     },
-    utcLuxonDateTime() {
-      return this.luxonDateTime.setZone('UTC')
+    utcLuxonDateTime(): DateTime | null {
+      if (this.luxonDateTime == null) {
+        return null;
+      } else {
+        return this.luxonDateTime.setZone('UTC');
+      }
     },
-    timeZoneString() {
+    timeZoneString(): string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
       return this.luxonDateTime.zoneName;
     },
-    dateString() {
+    dateString(): string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
       return this.luxonDateTime.toLocaleString(DateTime.DATETIME_FULL);
     },
-    utcDateString() {
+    utcDateString(): string {
+      if (this.utcLuxonDateTime == null){
+        return "";
+      }
       return this.utcLuxonDateTime.toLocaleString(DateTime.DATETIME_FULL);
     },
-    isoString() {
+    isoString():string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
       return this.luxonDateTime.toISO();
     },
-    utcIsoString() {
+    utcIsoString():string {
+      if (this.utcLuxonDateTime == null){
+        return "";
+      }
       return this.utcLuxonDateTime.toISO();
     },
-    rfcString() {
+    rfcString():string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
       return this.luxonDateTime.toRFC2822();
     },
-    utcRfcString() {
+    utcRfcString():string {
+      if (this.utcLuxonDateTime == null){
+        return "";
+      }
       return this.utcLuxonDateTime.toRFC2822();
     },
-    hyphenSeparated() {
+    sqlString():string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
       return this.luxonDateTime.toFormat('yyyy-MM-dd HH:mm:ss')
     },
-    utcHyphenSeparated() {
+    utcSqlString():string {
+      if (this.utcLuxonDateTime == null){
+        return "";
+      }
       return this.utcLuxonDateTime.toFormat('yyyy-MM-dd HH:mm:ss')
     },
-    diffString() {
+    diffString():string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
       let isBeforeNow;
      //1秒未満を切り捨てるためにちょっと回りくどいことをしている
       const now = DateTime.fromSeconds(Number(DateTime.now().toFormat("X")));
-      console.log(now);
-      console.log(this.luxonDateTime);
       if ( this.luxonDateTime.equals(now)) {
         return "0秒";
       }
@@ -153,7 +191,7 @@ export default {
       return result
     }
   }
-}
+})
 </script>
 
 <style scoped>

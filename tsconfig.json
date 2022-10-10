@@ -8,6 +8,8 @@
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
     "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
