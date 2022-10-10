@@ -90,27 +90,27 @@
           </tr>
           <tr>
             <td>UnixTime</td>
-            <td colspan="2">{{unixTimeString}}</td>
+            <td colspan="2"><value-to-clipboard :text="unixTimeString"></value-to-clipboard></td>
           </tr>
           <tr>
             <td>日時表記(環境依存)</td>
-            <td>{{dateString}}</td>
-            <td>{{utcDateString}}</td>
+            <td><value-to-clipboard :text="dateString"></value-to-clipboard></td>
+            <td><value-to-clipboard :text="utcDateString"></value-to-clipboard></td>
           </tr>
           <tr>
             <td>SQL形式</td>
-            <td>{{sqlString}}</td>
-            <td>{{utcSqlString}}</td>
+            <td><value-to-clipboard :text="sqlString"></value-to-clipboard></td>
+            <td><value-to-clipboard :text="utcSqlString"></value-to-clipboard></td>
           </tr>
           <tr>
             <td>ISO 8601</td>
-            <td>{{isoString}}</td>
-            <td>{{utcIsoString}}</td>
+            <td><value-to-clipboard :text="isoString"></value-to-clipboard></td>
+            <td><value-to-clipboard :text="utcIsoString"></value-to-clipboard></td>
           </tr>
           <tr>
             <td>RFC 2822</td>
-            <td>{{rfcString}}</td>
-            <td>{{utcRfcString}}</td>
+            <td><value-to-clipboard :text="rfcString"></value-to-clipboard></td>
+            <td><value-to-clipboard :text="utcRfcString"></value-to-clipboard></td>
           </tr>
         <tr>
           <td>現在時刻との差</td>
@@ -131,6 +131,7 @@ import {DateTime} from 'luxon';
 import Vue from "vue";
 
 import {getTimeZones} from "@vvo/tzdb";
+import ValueToClipboard from "~/components/valueToClipboard.vue";
 
 const PARSE_MODE = {
   auto: 'auto',
@@ -161,6 +162,9 @@ interface PageData {
 
 export default Vue.extend({
   name: "unixtime",
+  components:{
+    ValueToClipboard
+  },
   data ():PageData {
     return {
       inputValue:DateTime.now().toFormat("X"),
