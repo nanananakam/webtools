@@ -1,12 +1,18 @@
 <template>
   <v-row>
     <v-col class="text-center">
-      <v-form>
-        <v-text-field
-          v-model="inputValue"
-        >
-        </v-text-field>
-      </v-form>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="6" lg="4" xl="3">
+          <v-form>
+            <v-text-field v-model="inputValue"></v-text-field>
+          </v-form>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
       <v-simple-table>
         <thead>
           <tr>
@@ -42,6 +48,9 @@
         </tr>
         </tbody>
       </v-simple-table>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
     </v-col>
   </v-row>
 </template>
