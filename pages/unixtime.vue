@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col class="text-center">
+    <v-col>
       <!-- input time begin-->
       <v-row>
         <v-spacer></v-spacer>
@@ -73,8 +73,8 @@
         <thead>
           <tr>
             <th></th>
-            <th class="text-center">{{timeZoneString}}</th>
-            <th class="text-center">UTC</th>
+            <th>{{timeZoneString}}</th>
+            <th>UTC</th>
           </tr>
         </thead>
         <tbody>
@@ -86,6 +86,7 @@
               <div v-if="resultParseMode === 'sql'">SQL形式</div>
               <div v-if="resultParseMode === 'iso'">ISO8601形式</div>
               <div v-if="resultParseMode === 'rfc'">RFC2822形式</div>
+              <div v-if="resultParseMode === 'http'">HTTP(RFC 850/RFC 1123)形式</div>
             </td>
           </tr>
           <tr>
@@ -112,6 +113,10 @@
             <td><value-to-clipboard :text="rfcString"></value-to-clipboard></td>
             <td><value-to-clipboard :text="utcRfcString"></value-to-clipboard></td>
           </tr>
+          <tr>
+            <td>HTTP(RFC 850/RFC 1123)</td>
+            <td colspan="2"><value-to-clipboard :text="utcHttpString"></value-to-clipboard></td>
+          </tr>
         <tr>
           <td>現在時刻との差</td>
           <td colspan="2">{{diffString}}</td>
@@ -122,6 +127,62 @@
         <v-spacer></v-spacer>
       </v-row>
       <!-- show parse result end-->
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+          <h2>入力可能な形式</h2>
+          <v-simple-table>
+            <thead>
+            <tr>
+              <th>形式</th>
+              <th>例</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Unixtime(秒)</td>
+              <td><pre>1542674993</pre></td>
+            </tr>
+            <tr>
+              <td>SQL形式</td>
+              <td><pre>2017-05-15 09:24:15
+2017-05-15
+09:24:15</pre></td>
+            </tr>
+            <tr>
+              <td>ISO8601形式</td>
+              <td><pre>2016
+2016-05
+201605
+2016-05-25
+20160525
+2016-05-25T09
+2016-05-25T09:24
+2016-05-25T09:24:15
+2016-05-25T0924
+2016-05-25T092415
+2016-W21-3
+2016W213
+2016-200
+2016200
+09:24
+09:24:15</pre></td>
+            </tr>
+            <tr>
+              <td>RFC2822形式</td>
+              <td><pre>Tue, 01 Nov 2016 13:23:12 +0630</pre></td>
+            </tr>
+            <tr>
+              <td>HTTP(RFC 850/RFC 1123)形式</td>
+              <td><pre>Sunday, 06-Nov-94 08:49:37 GMT
+Sun, 06 Nov 1994 08:49:37 GMT</pre></td>
+            </tr>
+            </tbody>
+          </v-simple-table>
+          <div>自動判別の優先順位は　<code>UnixTime(秒)</code> > <code>SQL形式</code> > <code>ISO8601形式</code> > <code>RFC2822形式</code> > <code>HTTP(RFC 850/RFC 1123)形式</code>です</div>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -139,6 +200,7 @@ const PARSE_MODE = {
   sql: 'sql',
   iso: 'iso',
   rfc: 'rfc',
+  http: 'http',
 } as const;
 type PARSE_MODE = typeof PARSE_MODE[keyof typeof PARSE_MODE];
 
@@ -188,7 +250,7 @@ export default Vue.extend({
           },
           {
             mode:"unix",
-            modeString:"UnixTime"
+            modeString:"UnixTime(秒)"
           },
           {
             mode:"sql",
@@ -201,6 +263,10 @@ export default Vue.extend({
           {
             mode:"rfc",
             modeString:"RFC2822"
+          },
+          {
+            mode:"http",
+            modeString:"HTTP(RFC 850/RFC 1123)"
           }
         ]
     }
@@ -226,6 +292,10 @@ export default Vue.extend({
             const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
             if (parsedAsRfc.isValid) {
               return {dateTime:parsedAsRfc.setZone(this.timeZoneString), resultParseMode:"rfc"};
+            }
+            const parsedAsHttp = DateTime.fromHTTP(this.inputValue)
+            if (parsedAsHttp.isValid){
+              return {dateTime:parsedAsHttp.setZone(this.timeZoneString), resultParseMode:"http"}
             }
           }
           return null;
@@ -255,6 +325,13 @@ export default Vue.extend({
           const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
           if (parsedAsRfc.isValid) {
             return {dateTime:parsedAsRfc.setZone(this.timeZoneString), resultParseMode:"rfc"};
+          }
+          return null;
+          //必ずreturnするのでbreak不要
+        case "http":
+          const parsedAsHttp = DateTime.fromHTTP(this.inputValue)
+          if (parsedAsHttp.isValid){
+            return {dateTime:parsedAsHttp.setZone(this.timeZoneString), resultParseMode:"http"}
           }
           return null;
           //必ずreturnするのでbreak不要
@@ -334,6 +411,12 @@ export default Vue.extend({
         return "";
       }
       return this.utcLuxonDateTime.toFormat('yyyy-MM-dd HH:mm:ss')
+    },
+    utcHttpString():string {
+      if (this.utcLuxonDateTime == null){
+        return ""
+      }
+      return this.utcLuxonDateTime.toHTTP()
     },
     diffString():string {
       if (this.luxonDateTime == null){
@@ -465,5 +548,9 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.nuxt-content-highlight code {
+  background-color: unset !important;
+  padding: unset !important;
+}
 
 </style>
