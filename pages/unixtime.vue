@@ -41,10 +41,22 @@
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="12" lg="9" xl="6">
           <div class="text-center">
+            <v-btn v-on:click="firstDayOfLastMonth" v-bind:disabled="luxonDateTime == null">前月1日</v-btn>
+            <v-btn v-on:click="firstDayOfThisMonth" v-bind:disabled="luxonDateTime == null">今月1日</v-btn>
+            <v-btn v-on:click="setZeroZero" v-bind:disabled="luxonDateTime == null">00:00:00</v-btn>
+            <v-btn v-on:click="firstDayOfNextMonth" v-bind:disabled="luxonDateTime == null">翌月1日</v-btn>
+          </div>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+          <div class="text-center">
           <v-btn v-on:click="minusOneMonths" v-bind:disabled="luxonDateTime == null">-1ヶ月</v-btn>
           <v-btn v-on:click="minusOneDay" v-bind:disabled="luxonDateTime == null">-1日</v-btn>
           <v-btn v-on:click="minusOneHour" v-bind:disabled="luxonDateTime == null">-1時間</v-btn>
-          <v-btn v-on:click="setZeroZero" v-bind:disabled="luxonDateTime == null">00:00:00</v-btn>
+          <v-btn v-on:click="setNow">現在時刻</v-btn>
           <v-btn v-on:click="plusOneHour" v-bind:disabled="luxonDateTime == null">+1時間</v-btn>
           <v-btn v-on:click="plusOneDay" v-bind:disabled="luxonDateTime == null">+1日</v-btn>
           <v-btn v-on:click="plusOneMonths" v-bind:disabled="luxonDateTime == null">+1ヶ月</v-btn>
@@ -76,7 +88,10 @@
               <div v-if="resultParseMode === 'rfc'">RFC2822形式</div>
             </td>
           </tr>
-
+          <tr>
+            <td>UnixTime</td>
+            <td colspan="2">{{unixTimeString}}</td>
+          </tr>
           <tr>
             <td>日時表記(環境依存)</td>
             <td>{{dateString}}</td>
@@ -262,6 +277,12 @@ export default Vue.extend({
         return this.luxonDateTime.setZone('UTC');
       }
     },
+    unixTimeString(): string {
+      if (this.luxonDateTime == null){
+        return "";
+      }
+      return this.luxonDateTime.toFormat("X");
+    },
     dateString(): string {
       if (this.luxonDateTime == null){
         return "";
@@ -365,68 +386,75 @@ export default Vue.extend({
     }
   },
   methods:{
+    resetParseMode: function(){
+      this.parseMode = {
+        mode:"auto",
+        modeString:"自動"
+      };
+    },
     plusOneHour: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.plus({hours:1}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
     },
     minusOneHour: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.minus({hours:1}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
     },
     plusOneDay: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.plus({days:1}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
     },
     minusOneDay: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.minus({days:1}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
     },
     plusOneMonths: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.plus({months:1}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
     },
     minusOneMonths: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.minus({months:1}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
     },
     setZeroZero: function(){
       if (this.luxonDateTime != null){
         this.inputValue = this.luxonDateTime.set({hour:0,minute:0,second:0}).toFormat("X");
-        this.parseMode = {
-          mode:"auto",
-          modeString:"自動"
-        };
+        this.resetParseMode();
       }
+    },
+    firstDayOfThisMonth: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.startOf("month").toFormat("X")
+        this.resetParseMode();
+      }
+    },
+    firstDayOfLastMonth: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.startOf("month").minus({days:1}).startOf("month").toFormat("X");
+        this.resetParseMode();
+      }
+    },
+    firstDayOfNextMonth: function(){
+      if (this.luxonDateTime != null){
+        this.inputValue = this.luxonDateTime.endOf("month").plus({days:1}).startOf("month").toFormat("X");
+        this.resetParseMode();
+      }
+    },
+    setNow: function(){
+      this.resetParseMode();
+      this.inputValue = DateTime.now().toFormat("X")
     }
   },
 })
