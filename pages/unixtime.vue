@@ -44,35 +44,6 @@
         <v-spacer></v-spacer>
       </v-row>
       <!-- select time zone end-->
-      <!-- time math button begin-->
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-          <div class="text-center">
-            <v-btn v-on:click="firstDayOfLastMonth" v-bind:disabled="luxonDateTime == null">前月1日</v-btn>
-            <v-btn v-on:click="firstDayOfThisMonth" v-bind:disabled="luxonDateTime == null">今月1日</v-btn>
-            <v-btn v-on:click="setZeroZero" v-bind:disabled="luxonDateTime == null">00:00:00</v-btn>
-            <v-btn v-on:click="firstDayOfNextMonth" v-bind:disabled="luxonDateTime == null">翌月1日</v-btn>
-          </div>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-          <div class="text-center">
-          <v-btn v-on:click="minusOneMonths" v-bind:disabled="luxonDateTime == null">-1ヶ月</v-btn>
-          <v-btn v-on:click="minusOneDay" v-bind:disabled="luxonDateTime == null">-1日</v-btn>
-          <v-btn v-on:click="minusOneHour" v-bind:disabled="luxonDateTime == null">-1時間</v-btn>
-          <v-btn v-on:click="setNow">現在時刻</v-btn>
-          <v-btn v-on:click="plusOneHour" v-bind:disabled="luxonDateTime == null">+1時間</v-btn>
-          <v-btn v-on:click="plusOneDay" v-bind:disabled="luxonDateTime == null">+1日</v-btn>
-          <v-btn v-on:click="plusOneMonths" v-bind:disabled="luxonDateTime == null">+1ヶ月</v-btn>
-          </div>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
-      <!-- time math button end-->
       <!-- show parse result begin-->
       <v-row>
         <v-spacer></v-spacer>
@@ -88,6 +59,23 @@
           </v-data-table>
           <h2>追加情報</h2>
           <v-data-table :headers="resultOtherDataTableHeaders" :items="resultOtherDataTableItems" hide-default-header hide-default-footer></v-data-table>
+          <!-- time math button begin-->
+              <div class="text-center">
+                <v-btn v-on:click="firstDayOfLastMonth" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">前月1日</v-btn>
+                <v-btn v-on:click="firstDayOfThisMonth" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">今月1日</v-btn>
+                <v-btn v-on:click="setZeroZero" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">00:00:00</v-btn>
+                <v-btn v-on:click="firstDayOfNextMonth" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">翌月1日</v-btn>
+              </div>
+              <div class="text-center">
+                <v-btn v-on:click="minusOneMonths" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">-1ヶ月</v-btn>
+                <v-btn v-on:click="minusOneDay" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">-1日</v-btn>
+                <v-btn v-on:click="minusOneHour" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">-1時間</v-btn>
+                <v-btn v-on:click="setNow" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">現在時刻</v-btn>
+                <v-btn v-on:click="plusOneHour" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">+1時間</v-btn>
+                <v-btn v-on:click="plusOneDay" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">+1日</v-btn>
+                <v-btn v-on:click="plusOneMonths" v-bind:disabled="luxonDateTime == null" class="ma-xs-4 ma-sm-4 ma-md-2 ma-lg-2 ma-xl-2">+1ヶ月</v-btn>
+              </div>
+          <!-- time math button end-->
           <h2>入力可能な形式</h2>
           <v-data-table :headers="inputFormatDataTableHeaders" :items="inputFormatDatatableItems" hide-default-header hide-default-footer>
             <template v-slot:item.example="{ item }">
