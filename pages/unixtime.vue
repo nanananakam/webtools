@@ -77,7 +77,8 @@
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-          <v-data-table :headers="dataTableHeaders" :items="dataTableItems" hide-default-footer>
+          <h2>変換結果</h2>
+          <v-data-table :headers="resultDateTimeDataTableHeaders" :items="resultDateTimeDataTableItems" hide-default-footer>
             <template v-slot:item.resultInTargetTimeZone="{ item }">
               <value-to-clipboard :text="item.resultInTargetTimeZone"></value-to-clipboard>
             </template>
@@ -85,16 +86,8 @@
               <value-to-clipboard :text="item.resultInUtc"></value-to-clipboard>
             </template>
           </v-data-table>
-          <div>
-            入力形式 :
-            <span v-if="formatType == null">解析できませんでした</span>
-            <span v-if="formatType === 'unix'">UnixTime</span>
-            <span v-if="formatType === 'sql'">SQL形式</span>
-            <span v-if="formatType === 'iso'">ISO8601形式</span>
-            <span v-if="formatType === 'rfc'">RFC2822形式</span>
-            <span v-if="formatType === 'http'">HTTP(RFC 850/RFC 1123)形式</span>
-          </div>
-          <div>現在時刻との差：{{diffString}}</div>
+          <h2>追加情報</h2>
+          <v-data-table :headers="resultOtherDataTableHeaders" :items="resultOtherDataTableItems" hide-default-header hide-default-footer></v-data-table>
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
@@ -199,12 +192,18 @@ interface PageData {
   timeZoneList: TimeZoneElement[],
   parseMode: ParseModeSelectorElement,
   parseModeList: ParseModeSelectorElement[],
+  resultOtherDataTableHeaders: DataTableHeader[]
 }
 
-export interface DataTableItem{
+interface ResultDateTimeDataTableItem{
   formatTypeString: string,
   resultInTargetTimeZone: string,
   resultInUtc: string,
+}
+
+interface ResultOtherDataTableItem{
+  key: string,
+  value: string,
 }
 
 export default Vue.extend({
@@ -235,19 +234,31 @@ export default Vue.extend({
       },
       {
         mode:"sql",
-        modeString:"SQL"
+        modeString:"SQL形式"
       },
       {
         mode:"iso",
-        modeString:"ISO8601"
+        modeString:"ISO 8601形式"
       },
       {
         mode:"rfc",
-        modeString:"RFC2822"
+        modeString:"RFC 2822形式"
       },
       {
         mode:"http",
-        modeString:"HTTP(RFC 850/RFC 1123)"
+        modeString:"HTTP 形式(RFC 850/RFC 1123)"
+      }
+    ]
+    const resultOtherDataTableHeaders:DataTableHeader[] = [
+      {
+        text: '',
+        sortable: false,
+        value: 'key'
+      },
+      {
+        text:"",
+        sortable: false,
+        value: 'value'
       }
     ]
     return {
@@ -255,7 +266,8 @@ export default Vue.extend({
       timeZoneString:DateTime.now().zoneName,
       timeZoneList: timeZoneList,
       parseMode:parseModeList[0],
-      parseModeList:parseModeList
+      parseModeList:parseModeList,
+      resultOtherDataTableHeaders:resultOtherDataTableHeaders,
     }
   },
   computed: {
@@ -458,7 +470,7 @@ export default Vue.extend({
 
       return result
     },
-    dataTableHeaders():DataTableHeader[] {
+    resultDateTimeDataTableHeaders():DataTableHeader[] {
       return [
         {
           text: "形式",
@@ -477,7 +489,7 @@ export default Vue.extend({
         }
       ];
     },
-    dataTableItems():DataTableItem[] {
+    resultDateTimeDataTableItems():ResultDateTimeDataTableItem[] {
       return [
         {
           formatTypeString: "UnixTime形式",
@@ -508,6 +520,19 @@ export default Vue.extend({
           formatTypeString: "HTTP(RFC 850/RFC 1123)",
           resultInTargetTimeZone: this.utcHttpString,
           resultInUtc: this.utcHttpString,
+        }
+      ]
+    },
+    resultOtherDataTableItems(): ResultOtherDataTableItem[] {
+      const inputFormatString = this.parseModeList.find((parseMode)=>(parseMode.mode === this.formatType))!.modeString
+      return [
+        {
+          "key": "現在時刻との差",
+          "value": this.diffString
+        },
+        {
+          "key": "入力形式",
+          "value": inputFormatString
         }
       ]
     }
