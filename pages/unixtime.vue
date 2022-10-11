@@ -88,66 +88,16 @@
           </v-data-table>
           <h2>追加情報</h2>
           <v-data-table :headers="resultOtherDataTableHeaders" :items="resultOtherDataTableItems" hide-default-header hide-default-footer></v-data-table>
+          <h2>入力可能な形式</h2>
+          <v-data-table :headers="inputFormatDataTableHeaders" :items="inputFormatDatatableItems" hide-default-header hide-default-footer>
+            <template v-slot:item.example="{ item }">
+              <pre>{{item.example}}</pre>
+            </template>
+          </v-data-table>
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
       <!-- show parse result end-->
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-          <h2>入力可能な形式</h2>
-          <v-simple-table>
-            <thead>
-            <tr>
-              <th>形式</th>
-              <th>例</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>Unixtime(秒)</td>
-              <td><pre>1542674993</pre></td>
-            </tr>
-            <tr>
-              <td>SQL形式</td>
-              <td><pre>2017-05-15 09:24:15
-2017-05-15
-09:24:15</pre></td>
-            </tr>
-            <tr>
-              <td>ISO8601形式</td>
-              <td><pre>2016
-2016-05
-201605
-2016-05-25
-20160525
-2016-05-25T09
-2016-05-25T09:24
-2016-05-25T09:24:15
-2016-05-25T0924
-2016-05-25T092415
-2016-W21-3
-2016W213
-2016-200
-2016200
-09:24
-09:24:15</pre></td>
-            </tr>
-            <tr>
-              <td>RFC2822形式</td>
-              <td><pre>Tue, 01 Nov 2016 13:23:12 +0630</pre></td>
-            </tr>
-            <tr>
-              <td>HTTP(RFC 850/RFC 1123)形式</td>
-              <td><pre>Sunday, 06-Nov-94 08:49:37 GMT
-Sun, 06 Nov 1994 08:49:37 GMT</pre></td>
-            </tr>
-            </tbody>
-          </v-simple-table>
-          <div>自動判別の優先順位は <code>UnixTime(秒)</code> > <code>SQL形式</code> > <code>ISO8601形式</code> > <code>RFC2822形式</code> > <code>HTTP(RFC 850/RFC 1123)形式</code>です</div>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -186,13 +136,20 @@ interface TimeZoneElement {
   timeZoneDetailString: string,
 }
 
+interface InputFormatExampleDataTableItem{
+  formatName: string,
+  example: string,
+}
+
 interface PageData {
   inputValue: string,
   timeZoneString: string,
   timeZoneList: TimeZoneElement[],
   parseMode: ParseModeSelectorElement,
   parseModeList: ParseModeSelectorElement[],
-  resultOtherDataTableHeaders: DataTableHeader[]
+  resultOtherDataTableHeaders: DataTableHeader[],
+  inputFormatDataTableHeaders: DataTableHeader[],
+  inputFormatDatatableItems: InputFormatExampleDataTableItem[]
 }
 
 interface ResultDateTimeDataTableItem{
@@ -261,6 +218,58 @@ export default Vue.extend({
         value: 'value'
       }
     ]
+    const inputFormatExampleDataTableHeaders:DataTableHeader[] = [
+      {
+        text: "形式",
+        sortable: false,
+        value: "formatName"
+      },
+      {
+        text: "例",
+        sortable: false,
+        value: "example"
+      }
+    ];
+    const inputFormatExampleDataTableItems:InputFormatExampleDataTableItem[] = [
+      {
+        formatName: "Unixtime(秒)",
+        example: "1542674993"
+      },
+      {
+        formatName: "SQL形式",
+        example: `2017-05-15 09:24:15
+2017-05-15
+09:24:15`
+      },
+      {
+        formatName: "ISO 8601形式",
+        example: `2016
+2016-05
+201605
+2016-05-25
+20160525
+2016-05-25T09
+2016-05-25T09:24
+2016-05-25T09:24:15
+2016-05-25T0924
+2016-05-25T092415
+2016-W21-3
+2016W213
+2016-200
+2016200
+09:24
+09:24:15`
+      },
+      {
+        formatName: "RFC 2822形式",
+        example: "Tue, 01 Nov 2016 13:23:12 +0630"
+      },
+      {
+        formatName: "HTTP(RFC 850/RFC 1123)形式",
+        example: `Sunday, 06-Nov-94 08:49:37 GMT
+Sun, 06 Nov 1994 08:49:37 GMT`
+      }
+    ];
     return {
       inputValue:DateTime.now().toFormat("X"),
       timeZoneString:DateTime.now().zoneName,
@@ -268,6 +277,8 @@ export default Vue.extend({
       parseMode:parseModeList[0],
       parseModeList:parseModeList,
       resultOtherDataTableHeaders:resultOtherDataTableHeaders,
+      inputFormatDataTableHeaders:inputFormatExampleDataTableHeaders,
+      inputFormatDatatableItems:inputFormatExampleDataTableItems
     }
   },
   computed: {
@@ -517,7 +528,7 @@ export default Vue.extend({
           resultInUtc: this.utcRfcString
         },
         {
-          formatTypeString: "HTTP(RFC 850/RFC 1123)",
+          formatTypeString: "HTTP(RFC 850/RFC 1123)形式",
           resultInTargetTimeZone: this.utcHttpString,
           resultInUtc: this.utcHttpString,
         }
