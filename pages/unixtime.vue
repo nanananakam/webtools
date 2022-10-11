@@ -77,60 +77,24 @@
       <v-row>
         <v-spacer></v-spacer>
         <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>{{timeZoneString}}</th>
-            <th>UTC</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>入力形式</td>
-            <td colspan="2">
-              <div v-if="resultParseMode == null">解析できませんでした</div>
-              <div v-if="resultParseMode === 'unix'">UnixTime</div>
-              <div v-if="resultParseMode === 'sql'">SQL形式</div>
-              <div v-if="resultParseMode === 'iso'">ISO8601形式</div>
-              <div v-if="resultParseMode === 'rfc'">RFC2822形式</div>
-              <div v-if="resultParseMode === 'http'">HTTP(RFC 850/RFC 1123)形式</div>
-            </td>
-          </tr>
-          <tr>
-            <td>UnixTime</td>
-            <td colspan="2"><value-to-clipboard :text="unixTimeString"></value-to-clipboard></td>
-          </tr>
-          <tr>
-            <td>日時表記(環境依存)</td>
-            <td><value-to-clipboard :text="dateString"></value-to-clipboard></td>
-            <td><value-to-clipboard :text="utcDateString"></value-to-clipboard></td>
-          </tr>
-          <tr>
-            <td>SQL形式</td>
-            <td><value-to-clipboard :text="sqlString"></value-to-clipboard></td>
-            <td><value-to-clipboard :text="utcSqlString"></value-to-clipboard></td>
-          </tr>
-          <tr>
-            <td>ISO 8601</td>
-            <td><value-to-clipboard :text="isoString"></value-to-clipboard></td>
-            <td><value-to-clipboard :text="utcIsoString"></value-to-clipboard></td>
-          </tr>
-          <tr>
-            <td>RFC 2822</td>
-            <td><value-to-clipboard :text="rfcString"></value-to-clipboard></td>
-            <td><value-to-clipboard :text="utcRfcString"></value-to-clipboard></td>
-          </tr>
-          <tr>
-            <td>HTTP(RFC 850/RFC 1123)</td>
-            <td colspan="2"><value-to-clipboard :text="utcHttpString"></value-to-clipboard></td>
-          </tr>
-        <tr>
-          <td>現在時刻との差</td>
-          <td colspan="2">{{diffString}}</td>
-        </tr>
-        </tbody>
-      </v-simple-table>
+          <v-data-table :headers="dataTableHeaders" :items="dataTableItems" hide-default-footer>
+            <template v-slot:item.resultInTargetTimeZone="{ item }">
+              <value-to-clipboard :text="item.resultInTargetTimeZone"></value-to-clipboard>
+            </template>
+            <template v-slot:item.resultInUtc="{ item }">
+              <value-to-clipboard :text="item.resultInUtc"></value-to-clipboard>
+            </template>
+          </v-data-table>
+          <div>
+            入力形式 :
+            <span v-if="formatType == null">解析できませんでした</span>
+            <span v-if="formatType === 'unix'">UnixTime</span>
+            <span v-if="formatType === 'sql'">SQL形式</span>
+            <span v-if="formatType === 'iso'">ISO8601形式</span>
+            <span v-if="formatType === 'rfc'">RFC2822形式</span>
+            <span v-if="formatType === 'http'">HTTP(RFC 850/RFC 1123)形式</span>
+          </div>
+          <div>現在時刻との差：{{diffString}}</div>
         </v-col>
         <v-spacer></v-spacer>
       </v-row>
@@ -201,16 +165,23 @@ import Vue from "vue";
 
 import {getTimeZones} from "@vvo/tzdb";
 import ValueToClipboard from "~/components/valueToClipboard.vue";
+import {DataTableHeader} from "vuetify";
 
-const PARSE_MODE = {
-  auto: 'auto',
+const FORMAT_TYPE = {
   unix: 'unix',
   sql: 'sql',
   iso: 'iso',
   rfc: 'rfc',
   http: 'http',
 } as const;
-type PARSE_MODE = typeof PARSE_MODE[keyof typeof PARSE_MODE];
+type FORMAT_TYPE = typeof FORMAT_TYPE[keyof typeof FORMAT_TYPE];
+
+const PARSE_MODE_PARTS = {
+  auto: 'auto',
+} as const
+type PARSE_MODE_PARTS = typeof PARSE_MODE_PARTS[keyof typeof PARSE_MODE_PARTS];
+
+type PARSE_MODE = FORMAT_TYPE | PARSE_MODE_PARTS
 
 interface ParseModeSelectorElement {
   mode: PARSE_MODE,
@@ -230,6 +201,12 @@ interface PageData {
   parseModeList: ParseModeSelectorElement[],
 }
 
+export interface DataTableItem{
+  formatTypeString: string,
+  resultInTargetTimeZone: string,
+  resultInUtc: string,
+}
+
 export default Vue.extend({
   name: "unixtime",
   head: {
@@ -239,74 +216,73 @@ export default Vue.extend({
     ValueToClipboard
   },
   data ():PageData {
+    const timeZoneList = getTimeZones({ includeUtc: true }).map(
+      timeZone => {
+        return {
+          timeZoneString: timeZone.name,
+          timeZoneDetailString: timeZone.rawFormat+" ("+timeZone.name+", "+timeZone.abbreviation+")"
+        }
+      }
+    );
+    const parseModeList:ParseModeSelectorElement[] = [
+        {
+          mode:"auto",
+          modeString:"自動判別"
+        },
+      {
+        mode:"unix",
+        modeString:"UnixTime(秒)"
+      },
+      {
+        mode:"sql",
+        modeString:"SQL"
+      },
+      {
+        mode:"iso",
+        modeString:"ISO8601"
+      },
+      {
+        mode:"rfc",
+        modeString:"RFC2822"
+      },
+      {
+        mode:"http",
+        modeString:"HTTP(RFC 850/RFC 1123)"
+      }
+    ]
     return {
       inputValue:DateTime.now().toFormat("X"),
       timeZoneString:DateTime.now().zoneName,
-      timeZoneList: getTimeZones({ includeUtc: true }).map(
-        timeZone => {
-          return {
-            timeZoneString: timeZone.name,
-            timeZoneDetailString: timeZone.rawFormat+" ("+timeZone.name+", "+timeZone.abbreviation+")"
-          }
-        }
-      ),
-      parseMode:{
-          mode:"auto",
-          modeString:"自動"
-      },
-      parseModeList:[
-          {
-            mode:"auto",
-            modeString:"自動判別"
-          },
-          {
-            mode:"unix",
-            modeString:"UnixTime(秒)"
-          },
-          {
-            mode:"sql",
-            modeString:"SQL"
-          },
-          {
-            mode:"iso",
-            modeString:"ISO8601"
-          },
-          {
-            mode:"rfc",
-            modeString:"RFC2822"
-          },
-          {
-            mode:"http",
-            modeString:"HTTP(RFC 850/RFC 1123)"
-          }
-        ]
+      timeZoneList: timeZoneList,
+      parseMode:parseModeList[0],
+      parseModeList:parseModeList
     }
   },
   computed: {
-    parseResult(): {dateTime:DateTime, resultParseMode: PARSE_MODE} | null {
+    parseResult(): {dateTime:DateTime, formatType: FORMAT_TYPE} | null {
       switch(this.parseMode.mode){
         case "auto":
           if (/^[0-9]+$/.exec(this.inputValue)){
             const parsedAsUnix = DateTime.fromSeconds(Number(this.inputValue))
             if (parsedAsUnix.isValid){
-              return {dateTime: DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString), resultParseMode:"unix"};
+              return {dateTime: DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString), formatType:"unix"};
             }
           } else {
             const parsedAsSQL = DateTime.fromSQL(this.inputValue);
             if (parsedAsSQL.isValid) {
-              return {dateTime:parsedAsSQL.setZone(this.timeZoneString), resultParseMode:"sql"}
+              return {dateTime:parsedAsSQL.setZone(this.timeZoneString), formatType:"sql"}
             }
             const parsedAsISO = DateTime.fromISO(this.inputValue);
             if (parsedAsISO.isValid) {
-              return {dateTime:parsedAsISO.setZone(this.timeZoneString), resultParseMode:"iso"};
+              return {dateTime:parsedAsISO.setZone(this.timeZoneString), formatType:"iso"};
             }
             const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
             if (parsedAsRfc.isValid) {
-              return {dateTime:parsedAsRfc.setZone(this.timeZoneString), resultParseMode:"rfc"};
+              return {dateTime:parsedAsRfc.setZone(this.timeZoneString), formatType:"rfc"};
             }
             const parsedAsHttp = DateTime.fromHTTP(this.inputValue)
             if (parsedAsHttp.isValid){
-              return {dateTime:parsedAsHttp.setZone(this.timeZoneString), resultParseMode:"http"}
+              return {dateTime:parsedAsHttp.setZone(this.timeZoneString), formatType:"http"}
             }
           }
           return null;
@@ -314,45 +290,45 @@ export default Vue.extend({
         case "unix":
           const parsedAsUnix = DateTime.fromSeconds(Number(this.inputValue))
           if (parsedAsUnix.isValid){
-            return {dateTime:DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString), resultParseMode:"unix"};
+            return {dateTime:DateTime.fromSeconds(Number(this.inputValue)).setZone(this.timeZoneString), formatType:"unix"};
           }
           return null;
           //必ずreturnするのでbreak不要
         case "sql":
           const parsedAsSQL = DateTime.fromSQL(this.inputValue);
           if (parsedAsSQL.isValid) {
-            return {dateTime:parsedAsSQL.setZone(this.timeZoneString), resultParseMode:"sql"}
+            return {dateTime:parsedAsSQL.setZone(this.timeZoneString), formatType:"sql"}
           }
           return null;
         //必ずreturnするのでbreak不要
         case "iso":
           const parsedAsISO = DateTime.fromISO(this.inputValue);
           if (parsedAsISO.isValid){
-            return {dateTime:parsedAsISO.setZone(this.timeZoneString),resultParseMode:"iso"};
+            return {dateTime:parsedAsISO.setZone(this.timeZoneString), formatType:"iso"};
           }
           return null;
           //必ずreturnするのでbreak不要
         case "rfc":
           const parsedAsRfc = DateTime.fromRFC2822(this.inputValue);
           if (parsedAsRfc.isValid) {
-            return {dateTime:parsedAsRfc.setZone(this.timeZoneString), resultParseMode:"rfc"};
+            return {dateTime:parsedAsRfc.setZone(this.timeZoneString), formatType:"rfc"};
           }
           return null;
           //必ずreturnするのでbreak不要
         case "http":
           const parsedAsHttp = DateTime.fromHTTP(this.inputValue)
           if (parsedAsHttp.isValid){
-            return {dateTime:parsedAsHttp.setZone(this.timeZoneString), resultParseMode:"http"}
+            return {dateTime:parsedAsHttp.setZone(this.timeZoneString), formatType:"http"}
           }
           return null;
           //必ずreturnするのでbreak不要
       }
     },
-    resultParseMode(): PARSE_MODE | null {
+    formatType(): FORMAT_TYPE | null {
       if (this.parseResult == null) {
         return null
       } else {
-        return this.parseResult.resultParseMode
+        return this.parseResult.formatType
       }
     },
     luxonDateTime(): DateTime | null {
@@ -481,6 +457,59 @@ export default Vue.extend({
       }
 
       return result
+    },
+    dataTableHeaders():DataTableHeader[] {
+      return [
+        {
+          text: "形式",
+          sortable: false,
+          value: "formatTypeString"
+        },
+        {
+          text: this.timeZoneString,
+          sortable: false,
+          value: "resultInTargetTimeZone"
+        },
+        {
+          text: "utc",
+          sortable: false,
+          value: "resultInUtc"
+        }
+      ];
+    },
+    dataTableItems():DataTableItem[] {
+      return [
+        {
+          formatTypeString: "UnixTime形式",
+          resultInTargetTimeZone: this.unixTimeString,
+          resultInUtc: this.unixTimeString
+        },
+        {
+          formatTypeString: "日時表記(環境依存)",
+          resultInTargetTimeZone: this.dateString,
+          resultInUtc: this.utcDateString
+        },
+        {
+          formatTypeString: "SQL形式",
+          resultInTargetTimeZone: this.sqlString,
+          resultInUtc: this.utcDateString
+        },
+        {
+          formatTypeString: "ISO 8601形式",
+          resultInTargetTimeZone: this.isoString,
+          resultInUtc: this.utcDateString,
+        },
+        {
+          formatTypeString: "RFC 2822形式",
+          resultInTargetTimeZone: this.rfcString,
+          resultInUtc: this.utcRfcString
+        },
+        {
+          formatTypeString: "HTTP(RFC 850/RFC 1123)",
+          resultInTargetTimeZone: this.utcHttpString,
+          resultInUtc: this.utcHttpString,
+        }
+      ]
     }
   },
   methods:{
