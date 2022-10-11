@@ -1,5 +1,10 @@
 # nanananakam-webtools
 
+## This project is deployed to
+https://www.nanananakam.com/
+
+Hosted by Cloudflare Pages
+
 ## Build Setup
 
 ```bash
