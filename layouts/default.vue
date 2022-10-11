@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -23,6 +23,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <div class="text-center"><NinjaAdMaxVertical></NinjaAdMaxVertical></div>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -42,6 +43,7 @@
       <v-container>
         <Nuxt />
       </v-container>
+      <div class="text-center"><NinjaAdMaxHorizontal></NinjaAdMaxHorizontal></div>
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam">nanananakam</a></span>
@@ -51,9 +53,15 @@
 
 <script lang="ts">
 import Vue from "vue";
+import NinjaAdMaxVertical from "~/components/ninjaAdMaxVertical.vue";
+import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
   name: 'DefaultLayout',
+  components:{
+    NinjaAdMaxVertical,
+    NinjaAdMaxHorizontal
+  },
   data() {
     return {
       clipped: false,
