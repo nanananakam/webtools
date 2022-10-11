@@ -46,7 +46,7 @@
       <div class="text-center"><NinjaAdMaxHorizontal></NinjaAdMaxHorizontal></div>
     </v-main>
     <v-footer :absolute="!fixed" app>
-      <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam">nanananakam</a></span>
+      <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
     </v-footer>
   </v-app>
 </template>
