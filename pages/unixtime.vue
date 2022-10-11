@@ -60,6 +60,7 @@
           <h2>追加情報</h2>
           <v-data-table :headers="resultOtherDataTableHeaders" :items="resultOtherDataTableItems" hide-default-header hide-default-footer></v-data-table>
           <!-- time math button begin-->
+          <h2>日時操作</h2>
           <div class="text-center">
                 <v-btn v-on:click="firstDayOfLastMonth" v-bind:disabled="luxonDateTime == null" xs="12" class="d-inline-flex ma-2">前月1日</v-btn>
                 <v-btn v-on:click="firstDayOfThisMonth" v-bind:disabled="luxonDateTime == null" class="d-inline-flex ma-2">今月1日</v-btn>

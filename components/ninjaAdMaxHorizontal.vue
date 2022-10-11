@@ -12,7 +12,7 @@ export default {
     iframe.setAttribute("scrolling","no");
     const head = document.getElementsByTagName('head')[0];
     this.$refs.ads.appendChild(iframe);
-    const html = '<script src="https://adm.shinobi.jp/s/8e3a80fb201e787e93fd822010d54864"><\/script>';
+    const html = '<script src="https://adm.shinobi.jp/o/87077c69d778679740763a312bfc3e58"><\/script>';
     const iframeDocument = iframe.contentWindow.document;
     iframeDocument.open();
     iframeDocument.write(html);
