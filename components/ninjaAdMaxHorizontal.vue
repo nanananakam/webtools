@@ -17,8 +17,8 @@ export default {
     iframePcDocument.write('<script src="https://adm.shinobi.jp/s/8e3a80fb201e787e93fd822010d54864"><\/script>');
     iframePcDocument.close();
     const iframeSp = document.createElement('iframe');
-    iframeSp.setAttribute("width",400);
-    iframeSp.setAttribute("height",75);
+    iframeSp.setAttribute("width",350);
+    iframeSp.setAttribute("height",150);
     iframeSp.setAttribute("class","d-inline d-sm-none");
     iframeSp.setAttribute("frameborder","no");
     iframeSp.setAttribute("scrolling","no");
