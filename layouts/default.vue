@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import {mdiClockOutline} from "@mdi/js";
 import NinjaAdMaxVertical from "~/components/ninjaAdMaxVertical.vue";
 import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
@@ -63,7 +64,7 @@ export default Vue.extend({
       fixed: false,
       items: [
         {
-          icon: 'mdi-clock-outline',
+          icon: mdiClockOutline,
           title: 'UnixTime便利ツール',
           to: '/unixtime',
         }

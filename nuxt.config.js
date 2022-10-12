@@ -63,6 +63,9 @@ export default {
     theme: {
       dark: false,
     },
+    defaultAssets: {
+      icons: "mdiSvg",
+    }
   },
 
   "google-gtag": {
