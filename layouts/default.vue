@@ -23,7 +23,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <div class="text-center"><NinjaAdMaxVertical></NinjaAdMaxVertical></div>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -48,13 +47,11 @@
 <script lang="ts">
 import Vue from "vue";
 import {mdiClockOutline} from "@mdi/js";
-import NinjaAdMaxVertical from "~/components/ninjaAdMaxVertical.vue";
 import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
   name: 'DefaultLayout',
   components:{
-    NinjaAdMaxVertical,
     NinjaAdMaxHorizontal
   },
   data() {
