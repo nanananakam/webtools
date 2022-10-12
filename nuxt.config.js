@@ -36,6 +36,7 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
     '@nuxtjs/google-gtag',
+    '@nuxtjs/google-fonts',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -65,7 +66,16 @@ export default {
     },
     defaultAssets: {
       icons: "mdiSvg",
+      font: false,
     }
+  },
+
+  "google-fonts": {
+    families: {
+      Roboto: true
+    },
+    download: true,
+    inject: true
   },
 
   "google-gtag": {
