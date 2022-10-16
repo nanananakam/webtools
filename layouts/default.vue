@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker} from "@mdi/js";
 import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
@@ -64,6 +64,11 @@ export default Vue.extend({
           icon: mdiClockOutline,
           title: 'UnixTime便利ツール',
           to: '/unixtime',
+        },
+        {
+          icon: mdiMapMarker,
+          title: 'IP情報確認ツール',
+          to: '/whois'
         }
       ],
       miniVariant: false,
@@ -90,6 +95,9 @@ export default Vue.extend({
     title(): string {
       if ( this.$route.fullPath == '/unixtime'){
         return "UnixTime便利ツール"
+      }
+      if ( this.$route.fullPath == '/whois'){
+        return "IP情報確認ツール"
       }
       return "nanananakam tools"
     }
