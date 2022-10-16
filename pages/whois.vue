@@ -6,18 +6,26 @@
         <v-text-field label="IPアドレス" v-model="inputValue"></v-text-field>
         <div>
           <recaptcha />
+        </div>
+        <br>
+        <div>
           <v-btn type="submit">確認</v-btn>
         </div>
       </v-form>
-      <v-switch v-model="showRawResponse" label="未整形レスポンスを表示"></v-switch>
       <h2 v-if="rdapDataTableItems.length>0 || loading">RDAP(whois) 取得結果</h2>
-      <v-data-table v-if="rdapDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="rdapDataTableItems" :loading="loading" hide-default-footer></v-data-table>
+      <v-data-table v-if="rdapDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="rdapDataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
+      <v-switch v-if="rdapDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" v-model="showRawResponse" label="未整形レスポンスを表示"></v-switch>
       <div v-if="showRawResponse && rdapResponseRaw">
         <h3>未整形レスポンス</h3>
         <v-textarea disabled v-model="rdapResponseRaw"></v-textarea>
       </div>
+      <br>
       <h2 v-if="ip2LocationDataTableItems.length>0 || loading">IP2Location LITE 取得結果</h2>
-      <v-data-table v-if="ip2LocationDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="ip2LocationDataTableItems" :loading="loading" hide-default-footer></v-data-table>
+      <v-data-table v-if="ip2LocationDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="ip2LocationDataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
+      <br>
+      <h2 v-if="ipApiDataTableItems.length>0 || ipApiLoading">ipapi 取得結果</h2>
+      <v-data-table v-if="ipApiDataTableItems.length>0 || ipApiLoading" :headers="commonDataTableHeaders" :items="ipApiDataTableItems" :loading="ipApiLoading" :items-per-page="minusOne" hide-default-footer></v-data-table>
+      <br>
       <div>This site or product includes IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.</div>
     </v-col>
     <v-spacer></v-spacer>
@@ -55,6 +63,10 @@ interface myResponse {
   ip2LocationRecord: ip2LocationRecord,
 }
 
+interface ipApiResponse {
+  [index: string]: string | boolean | number | null
+}
+
 interface commonDataTableItem {
   key: string,
   value: string,
@@ -65,9 +77,12 @@ interface PageData {
   rdapDataTableItems: commonDataTableItem[],
   rdapResponseRaw: string,
   ip2LocationDataTableItems: commonDataTableItem[],
+  ipApiDataTableItems: commonDataTableItem[],
   commonDataTableHeaders: DataTableHeader[],
   showRawResponse: boolean,
   loading: boolean,
+  ipApiLoading: boolean,
+  minusOne: number,
 }
 
 export default Vue.extend({
@@ -76,10 +91,13 @@ export default Vue.extend({
     return {
       showRawResponse: false,
       loading: false,
+      ipApiLoading: false,
+      minusOne: -1,
       rdapResponseRaw: "",
       inputValue:"",
       rdapDataTableItems: [],
       ip2LocationDataTableItems: [],
+      ipApiDataTableItems: [],
       commonDataTableHeaders: [
         {
           text: "",
@@ -138,11 +156,30 @@ export default Vue.extend({
               value: res.data.ip2LocationRecord.Country_short,
             },
             {
-              key: "Coutry_long",
+              key: "Country_long",
               value: res.data.ip2LocationRecord.Country_long,
             }
           ]
           this.loading = false
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      this.$axios.get<ipApiResponse>("https://ipapi.co/"+this.inputValue+"/json")
+        .then(res =>{
+          this.ipApiDataTableItems = Object.keys(res.data).map(key => {
+            if (res.data[key] == null){
+              return {
+                key: key,
+                value: ""
+              }
+            } else {
+              return {
+                key: key,
+                value: res.data[key]!.toString()
+              }
+            }
+          })
         })
         .catch(err => {
           console.log(err)
