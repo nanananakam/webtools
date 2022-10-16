@@ -6,7 +6,8 @@ https://www.nanananakam.com/
 Hosted by Cloudflare Pages
 
 ## Features
-- UnixTime便利ツール ( https://www.nanananakam.com/unixtime )
+- UnixTime便利ツール ( https://www.nanananakam.com/unixtime/ )
+- IP情報確認ツール ( https://www.nanananakam.com/whois/ )
 
 ## Build Setup
 
