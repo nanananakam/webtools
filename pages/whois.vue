@@ -2,6 +2,8 @@
   <v-row>
     <v-spacer></v-spacer>
     <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+      <h1>IP情報確認ツール</h1>
+      <div>入力されたIPに関する情報をRDAP(whois)、IP2Location LITE(<a href="https://lite.ip2location.com">https://lite.ip2location.com</a>)、ipapi(<a href="https://ipapi.co/">https://ipapi.co/</a>)から一括取得し表示します。</div>
       <v-form @submit.prevent="onSubmit" ref="form" v-model="valid">
         <v-text-field label="IPアドレス" v-model="inputValue" :rules="ipRules"></v-text-field>
         <div>
