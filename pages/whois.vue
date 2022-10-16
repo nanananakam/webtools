@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-spacer>
+    <v-spacer></v-spacer>
     <v-col xs="12" sm="12" md="12" lg="9" xl="6">
       <v-form @submit.prevent="onSubmit">
         <v-text-field label="IPアドレス" v-model="inputValue"></v-text-field>
@@ -20,7 +20,7 @@
       <v-data-table v-if="ip2LocationDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="ip2LocationDataTableItems" :loading="loading" hide-default-footer></v-data-table>
       <div>This site or product includes IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.</div>
     </v-col>
-    </v-spacer>
+    <v-spacer></v-spacer>
   </v-row>
 </template>
 
