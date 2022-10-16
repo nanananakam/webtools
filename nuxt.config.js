@@ -45,6 +45,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/recaptcha',
     '@nuxtjs/google-adsense',
+    '@nuxtjs/sitemap'
   ],
 
   'google-adsense': {
@@ -87,6 +88,11 @@ export default {
   recaptcha: {
     siteKey: "6LcJfH8iAAAAADjaTzuK39IJAJ4OS-5bbIwzHUeT",
     version: 2,
+  },
+
+  sitemap: {
+    path: '/sitemap.xml',
+    hostname: 'https://www.nanananakam.com',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
