@@ -2,16 +2,20 @@
   <v-row>
     <v-spacer></v-spacer>
     <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-      <v-form @submit.prevent="onSubmit">
-        <v-text-field label="IPアドレス" v-model="inputValue"></v-text-field>
+      <v-form @submit.prevent="onSubmit" ref="form" v-model="valid">
+        <v-text-field label="IPアドレス" v-model="inputValue" :rules="ipRules"></v-text-field>
         <div>
           <recaptcha />
         </div>
         <br>
         <div>
-          <v-btn type="submit">確認</v-btn>
+          <v-btn type="submit" :disabled="!valid">確認</v-btn>
         </div>
       </v-form>
+      <div v-for="error in errors">
+        <v-alert type="error">{{error}}</v-alert>
+      </div>
+      <br>
       <h2 v-if="rdapDataTableItems.length>0 || loading">RDAP(whois) 取得結果</h2>
       <v-data-table v-if="rdapDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="rdapDataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
       <v-switch v-if="rdapDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" v-model="showRawResponse" label="未整形レスポンスを表示"></v-switch>
@@ -36,6 +40,21 @@
 import Vue from "vue";
 import "@nuxtjs/recaptcha";
 import {DataTableHeader} from "vuetify";
+import {AxiosError} from 'axios'
+
+const myStatusCode = {
+  statusOk    : "OK",
+  statusError : "ERROR"
+} as const
+type myStatusCode = typeof myStatusCode[keyof typeof myStatusCode]
+
+const myErrorCode = {
+  errorInvalidInput : "ERROR_INVALID_INPUT",
+  errorRdapError    : "ERROR_RDAP_ERROR",
+  errorIp2LocationError : "ERROR_IP2LOCATION_ERROR",
+  errorOther            : "ERROR_OTHER",
+} as const
+type myErrorCode = typeof myErrorCode[keyof typeof myErrorCode];
 
 // 必要な項目のみ定義
 interface rdapResponse {
@@ -57,8 +76,8 @@ interface ip2LocationRecord {
 }
 
 interface myResponse {
-  statusCode: string,
-  errorCode: string,
+  statusCode: myStatusCode,
+  errorCode: myErrorCode,
   rdapResponseWithGuess: rdapResponseWithGuess,
   ip2LocationRecord: ip2LocationRecord,
 }
@@ -83,12 +102,17 @@ interface PageData {
   loading: boolean,
   ipApiLoading: boolean,
   minusOne: number,
+  errors: string[],
+  ipRules: ((value:string)=>string|boolean)[],
+  valid: boolean,
 }
 
 export default Vue.extend({
   name: "whois",
   data(): PageData{
     return {
+      errors: [],
+      valid: false,
       showRawResponse: false,
       loading: false,
       ipApiLoading: false,
@@ -109,11 +133,15 @@ export default Vue.extend({
           sortable: false,
           value: "value"
         }
+      ],
+      ipRules:[
+        v => /^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$/.test(v) || /((([0-9a-f]{1,4}:){7}([0-9a-f]{1,4}|:))|(([0-9a-f]{1,4}:){6}(:[0-9a-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){5}(((:[0-9a-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9a-f]{1,4}:){4}(((:[0-9a-f]{1,4}){1,3})|((:[0-9a-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){3}(((:[0-9a-f]{1,4}){1,4})|((:[0-9a-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){2}(((:[0-9a-f]{1,4}){1,5})|((:[0-9a-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9a-f]{1,4}:){1}(((:[0-9a-f]{1,4}){1,6})|((:[0-9a-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9a-f]{1,4}){1,7})|((:[0-9a-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/.test(v) || 'IPアドレスの形式ではありません'
       ]
     }
   },
   methods: {
     async onSubmit():Promise<void> {
+      this.errors = []
       this.loading = true
       this.rdapResponseRaw = ""
       this.rdapDataTableItems = []
@@ -122,7 +150,8 @@ export default Vue.extend({
       try {
         token = await this.$recaptcha.getResponse()
       }catch(e){
-        console.log(e)
+        this.errors.push("reCaptcha処理に失敗しました")
+        return
       }
       const params = {
         input:this.inputValue,
@@ -162,8 +191,9 @@ export default Vue.extend({
           ]
           this.loading = false
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err: AxiosError<myResponse>) => {
+          this.errors.push("RDAP, IP2Locationの取得に失敗しました")
+          this.loading = false
         })
       this.$axios.get<ipApiResponse>("https://ipapi.co/"+this.inputValue+"/json")
         .then(res =>{
@@ -181,8 +211,8 @@ export default Vue.extend({
             }
           })
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err: AxiosError<ipApiResponse>) => {
+          this.errors.push("ipapiの取得に失敗しました")
         })
       this.$recaptcha.reset()
     }
