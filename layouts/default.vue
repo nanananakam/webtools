@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline, mdiMapMarker} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation} from "@mdi/js";
 import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
@@ -70,12 +70,16 @@ export default Vue.extend({
           icon: mdiMapMarker,
           title: 'IP情報確認ツール',
           to: '/whois/'
+        },
+        {
+          icon: mdiInformation,
+          title: "このサイトについて",
+          to: '/about/'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      //title: 'nanananakam tools',
     }
   },
   beforeMount() {
