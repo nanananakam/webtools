@@ -40,6 +40,7 @@
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
+      <span class="ml-5"><a href="/about/">プライバシーポリシー・免責事項</a></span>
     </v-footer>
   </v-app>
 </template>
@@ -98,6 +99,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/unixtime')){
         return "IP情報確認ツール"
+      }
+      if ( this.$route.fullPath.startsWith('/about')){
+        return "このサイトについて"
       }
       return "nanananakam tools"
     }
