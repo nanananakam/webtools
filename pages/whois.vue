@@ -64,6 +64,9 @@ interface rdapResponse {
   country: string
   startAddress: string
   endAddress: string
+  handle: string
+  parentHandle: string
+  port43: string
 }
 
 interface rdapResponseWithGuess {
@@ -165,20 +168,36 @@ export default Vue.extend({
           this.rdapResponseRaw = res.data.rdapResponseWithGuess.rdapResponseRaw
           this.rdapDataTableItems = [
             {
-              key: "国",
-              value: res.data.rdapResponseWithGuess.rdapResponse.country,
+              key: "country",
+              value: res.data.rdapResponseWithGuess.rdapResponse.country || "（JPではない可能性が濃厚）",
             },
             {
-              key: "登録名",
+              key: "name",
               value: res.data.rdapResponseWithGuess.rdapResponse.name,
+            },
+            {
+              key: "hanlde",
+              value: res.data.rdapResponseWithGuess.rdapResponse.handle
+            },
+            {
+              key: "parentHandle",
+              value: res.data.rdapResponseWithGuess.rdapResponse.parentHandle
+            },
+            {
+              key: "startAddress",
+              value: res.data.rdapResponseWithGuess.rdapResponse.startAddress
+            },
+            {
+              key: "endAddress",
+              value: res.data.rdapResponseWithGuess.rdapResponse.endAddress
+            },
+            {
+              key: "port43",
+              value: res.data.rdapResponseWithGuess.rdapResponse.port43
             },
             {
               key: "組織説明（推定）",
               value: res.data.rdapResponseWithGuess.guessedName,
-            },
-            {
-              key: "IP範囲",
-              value: res.data.rdapResponseWithGuess.rdapResponse.startAddress+" - "+res.data.rdapResponseWithGuess.rdapResponse.endAddress,
             },
           ]
           this.ip2LocationDataTableItems = [
