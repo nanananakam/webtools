@@ -503,12 +503,12 @@ Sun, 06 Nov 1994 08:49:37 GMT`
         {
           formatTypeString: "SQL形式",
           resultInTargetTimeZone: this.sqlString,
-          resultInUtc: this.utcDateString
+          resultInUtc: this.utcSqlString
         },
         {
           formatTypeString: "ISO 8601形式",
           resultInTargetTimeZone: this.isoString,
-          resultInUtc: this.utcDateString,
+          resultInUtc: this.utcIsoString,
         },
         {
           formatTypeString: "RFC 2822形式",
