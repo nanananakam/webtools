@@ -40,13 +40,14 @@
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
+      <span class="ml-5"><a href="/about/">プライバシーポリシー・免責事項</a></span>
     </v-footer>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline, mdiMapMarker} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation} from "@mdi/js";
 import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
@@ -69,12 +70,16 @@ export default Vue.extend({
           icon: mdiMapMarker,
           title: 'IP情報確認ツール',
           to: '/whois/'
+        },
+        {
+          icon: mdiInformation,
+          title: "このサイトについて",
+          to: '/about/'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      //title: 'nanananakam tools',
     }
   },
   beforeMount() {
@@ -98,6 +103,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/unixtime')){
         return "IP情報確認ツール"
+      }
+      if ( this.$route.fullPath.startsWith('/about')){
+        return "このサイトについて"
       }
       return "nanananakam tools"
     }
