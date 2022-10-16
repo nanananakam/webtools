@@ -43,15 +43,16 @@ interface rdapResponseWithGuess {
   guessedName: string
 }
 
-interface ip2LocationResponse {
-  country: string
+interface ip2LocationRecord {
+  Country_short: string
+  Country_long: string
 }
 
 interface myResponse {
   statusCode: string,
   errorCode: string,
   rdapResponseWithGuess: rdapResponseWithGuess,
-  ip2LocationResponse: ip2LocationResponse,
+  ip2LocationRecord: ip2LocationRecord,
 }
 
 interface commonDataTableItem {
@@ -133,8 +134,12 @@ export default Vue.extend({
           ]
           this.ip2LocationDataTableItems = [
             {
-              key: "国",
-              value: res.data.ip2LocationResponse.country,
+              key: "Country_short",
+              value: res.data.ip2LocationRecord.Country_short,
+            },
+            {
+              key: "Coutry_long",
+              value: res.data.ip2LocationRecord.Country_long,
             }
           ]
           this.loading = false
