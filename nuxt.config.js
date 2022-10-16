@@ -43,6 +43,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/recaptcha',
     '@nuxtjs/google-adsense',
   ],
 
@@ -81,6 +82,11 @@ export default {
   "google-gtag": {
     id: "G-BKHJMCZ8H1",
     debug: true
+  },
+
+  recaptcha: {
+    siteKey: "6LcJfH8iAAAAADjaTzuK39IJAJ4OS-5bbIwzHUeT",
+    version: 2,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
