@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline, mdiMapMarker, mdiInformation} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter} from "@mdi/js";
 import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
@@ -70,6 +70,11 @@ export default Vue.extend({
           icon: mdiMapMarker,
           title: 'IP情報確認ツール',
           to: '/whois/'
+        },
+        {
+          icon: mdiCounter,
+          title: '文字数カウントツール',
+          to: '/length/'
         },
         {
           icon: mdiInformation,
@@ -103,6 +108,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/unixtime')){
         return "IP情報確認ツール"
+      }
+      if ( this.$route.fullPath.startsWith('/length')){
+        return "文字数カウントツール"
       }
       if ( this.$route.fullPath.startsWith('/about')){
         return "このサイトについて"
