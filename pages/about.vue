@@ -28,7 +28,10 @@
 
 <script>
 export default {
-  name: "about"
+  name: "about",
+  head: {
+    title: "このサイトについて"
+  }
 }
 </script>
 

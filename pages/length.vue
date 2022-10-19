@@ -32,6 +32,9 @@ interface PageData {
 
 export default Vue.extend({
   name: "length",
+  head: {
+    title:"文字数カウントツール"
+  },
   data(): PageData{
     let textEncoder = null
     if ("TextEncoder" in global){
