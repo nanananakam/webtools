@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline} from "@mdi/js";
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -77,6 +77,11 @@ export default Vue.extend({
           icon: mdiArrowCollapseVertical,
           title: "文字列ハッシュ化ツール",
           to: '/hash/'
+        },
+        {
+          icon: mdiFileArrowLeftRightOutline,
+          title: "Base64ツール",
+          to: '/base64/'
         },
         {
           icon: mdiInformation,
@@ -116,6 +121,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/hash')){
         return "文字列ハッシュ化ツール"
+      }
+      if ( this.$route.fullPath.startsWith('/base64')){
+        return "Base64エンコード・デコードツール"
       }
       if ( this.$route.fullPath.startsWith('/about')){
         return "このサイトについて"

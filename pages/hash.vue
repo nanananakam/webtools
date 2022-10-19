@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>文字列ハッシュ化ツール</h1>
-    <div>入力された文字列をmd5,sha1,sha256でハッシュ化し、HEX形式,Base64形式で出力します</div>
+    <div>入力された文字列をmd5,sha1,sha256でハッシュ化し、HEX形式,Base64形式で出力します。</div>
     <br>
     <v-text-field v-model="inputString"></v-text-field>
     <v-btn v-on:click="clearString">クリア</v-btn>
