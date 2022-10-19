@@ -1,7 +1,7 @@
 <template>
   <div>
       <h1>文字数カウントツール</h1>
-      <div>フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します、</div>
+      <div>フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します。</div>
       <br>
       <v-textarea solo v-model="inputString"></v-textarea>
       <v-btn v-on:click="clearString">クリア</v-btn>
