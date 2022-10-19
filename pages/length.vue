@@ -4,7 +4,8 @@
     <v-col xs="12" sm="12" md="12" lg="9" xl="6">
       <h1>文字数カウントツール</h1>
       <div>フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します、</div>
-      <v-textarea v-model="inputString"></v-textarea>
+      <br>
+      <v-textarea solo v-model="inputString"></v-textarea>
       <v-data-table :headers="commonDataTableHeaders" :items="resultDataTableItems" hide-default-footer></v-data-table>
     </v-col>
     <v-spacer></v-spacer>
@@ -22,13 +23,25 @@ interface commonDataTableItem {
 
 interface PageData {
   inputString: string,
-  commonDataTableHeaders: DataTableHeader[]
+  commonDataTableHeaders: DataTableHeader[],
+  textEncoder: TextEncoder | null,
+  segmenter: Intl.Segmenter | null
 }
 
 export default Vue.extend({
   name: "length",
   data(): PageData{
+    let textEncoder = null
+    if ("TextEncoder" in global){
+      textEncoder = new TextEncoder()
+    }
+    let segmenter = null
+    if ("Segmenter" in Intl) {
+      segmenter = new Intl.Segmenter("ja", {granularity: "grapheme"});
+    }
     return {
+      textEncoder: textEncoder,
+      segmenter: segmenter,
       inputString:"例えば👨‍👩‍👧‍👦のような絵文字が含まれたり、https://www.nanananakam.com/length/などURLが含まれる場合でもそれぞれの数え方で正しく数えることができます。",
       commonDataTableHeaders:[
         {
@@ -52,39 +65,40 @@ export default Vue.extend({
       return [...this.inputString].length
     },
     graphemeNum(): number | string {
-      if ("Segmenter" in Intl) {
-        const segmenter = new Intl.Segmenter("ja", {granularity: "grapheme"});
-        return [...segmenter.segment(this.inputString)].length
+      if (this.segmenter != null){
+        return [...this.segmenter.segment(this.inputString)].length
       } else {
         return "このブラウザではIntl.Segmenterがサポートされていません。Google Chrome最新版をご利用ください。"
       }
     },
-    utf8ByteNum(): number {
-      const utf8Encoder = new TextEncoder()
-      return utf8Encoder.encode(this.inputString).byteLength
+    utf8ByteNum(): number | string {
+      if (this.textEncoder != null) {
+        return this.textEncoder.encode(this.inputString).byteLength
+      } else {
+        return "このブラウザではTextEncoderがサポートされていません。Google Chrome最新版をご利用ください。"
+      }
     },
     twitterNumString(): string {
-      // firefoxが現時点の最新版でもSegmenter.Intlが使えないので分岐
-      if ("Segmenter" in Intl) {
+      if (this.segmenter == null) {
+        return "このブラウザではIntl.Segmenterがサポートされていません。Google Chrome最新版をご利用ください。"
+      }
+      if (this.textEncoder == null) {
+        return "このブラウザではTextEncoderがサポートされていません。Google Chrome最新版をご利用ください。"
+      }
         const urlRegex = /https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#\u3000-\u30FE\u4E00-\u9FA0\uFF01-\uFFE3]+/g
-        const urlReplacedInputValue = this.inputString.replace(urlRegex,"12345678901234567890123") //URLは半角23文字相当となる
-        const segmenter = new Intl.Segmenter("ja", {granularity: "grapheme"});
-        const utf8Encoder = new TextEncoder()
-        const twitterNum = [...segmenter.segment(urlReplacedInputValue)]
-          .map( s => {
-            if ( utf8Encoder.encode(s.segment).byteLength == 1 ) {
+        const urlReplacedInputValue = this.inputString.replace(urlRegex, "12345678901234567890123") //URLは半角23文字相当となる
+        const twitterNum = [...this.segmenter.segment(urlReplacedInputValue)]
+          .map(s => {
+            if (this.textEncoder!.encode(s.segment).byteLength == 1) {
               return 0.5 as number;
             } else {
               return 1 as number;
             }
           })
-          .reduce((a,b) => {
-            return a+b;
+          .reduce((a, b) => {
+            return a + b;
           })
-        return twitterNum.toString()+"/140"
-      } else {
-        return "このブラウザではIntl.Segmenterがサポートされていません。Google Chrome最新版をご利用ください。"
-      }
+        return twitterNum.toString() + "/140"
     },
     resultDataTableItems(): commonDataTableItem[]{
       return [
