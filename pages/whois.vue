@@ -114,6 +114,9 @@ interface PageData {
 
 export default Vue.extend({
   name: "whois",
+  head: {
+    title: "IP情報確認ツール"
+  },
   data(): PageData{
     return {
       errors: [],
