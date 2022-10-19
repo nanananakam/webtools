@@ -1,7 +1,5 @@
 <template>
-  <v-row>
-    <v-spacer></v-spacer>
-    <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+  <div>
       <h1>文字数カウントツール</h1>
       <div>フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します、</div>
       <br>
@@ -9,9 +7,7 @@
       <v-btn v-on:click="clearString">クリア</v-btn>
       <br>
       <v-data-table :headers="commonDataTableHeaders" :items="resultDataTableItems" hide-default-footer></v-data-table>
-    </v-col>
-    <v-spacer></v-spacer>
-  </v-row>
+  </div>
 </template>
 
 <script lang="ts">

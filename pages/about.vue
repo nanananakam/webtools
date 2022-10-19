@@ -1,7 +1,5 @@
 <template>
-  <v-row>
-    <v-spacer></v-spacer>
-    <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+  <div>
       <h1>このサイトについて</h1>
       <h2>作者について</h2>
       <div>Github: nanananakam(<a href="https://github.com/nanananakam">https://github.com/nanananakam</a>)</div>
@@ -20,9 +18,7 @@
       <div>当サイトからのリンクやバナーなどで移動したサイトで提供される情報、サービス等について一切の責任を負いません。</div>
       <div>また当サイトのコンテンツ・情報について、できる限り正確な情報を提供するように努めておりますが、正確性や安全性を保証するものではありません。</div>
       <div>当サイトに掲載された内容によって生じた損害等の一切の責任を負いかねますのでご了承ください。</div>
-    </v-col>
-    <v-spacer></v-spacer>
-  </v-row>
+  </div>
 </template>
 
 <script>

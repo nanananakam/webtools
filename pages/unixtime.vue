@@ -1,53 +1,25 @@
 <template>
-  <v-row>
-    <v-col>
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+  <div>
           <h1>UnixTime便利ツール</h1>
           <div>UnixTimeを始めとした様々な形式で時刻を入力し、形式変換やTimeZone変更、加減算ができます。</div>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
       <!-- input time begin-->
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="6" lg="4" xl="3">
           <v-form>
             <v-text-field label="時刻" v-model="inputValue"></v-text-field>
           </v-form>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
       <!-- input time end -->
       <!-- select parse mode begin-->
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="6" lg="4" xl="3">
           <v-form>
             <v-select label="入力形式" v-model="parseMode" :items="parseModeList" item-value="mode" item-text="modeString" return-object>
             </v-select>
           </v-form>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
       <!-- select parse mode end-->
       <!-- select time zone begin-->
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
           <v-form>
             <v-autocomplete label="TimeZone" v-model="timeZoneString" :items="timeZoneList" item-value="timeZoneString" item-text="timeZoneDetailString">
             </v-autocomplete>
           </v-form>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
       <!-- select time zone end-->
       <!-- show parse result begin-->
-      <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
           <h2>変換結果</h2>
           <v-data-table :headers="resultDateTimeDataTableHeaders" :items="resultDateTimeDataTableItems" hide-default-footer>
             <template v-slot:item.resultInTargetTimeZone="{ item }">
@@ -82,12 +54,8 @@
               <pre>{{item.example}}</pre>
             </template>
           </v-data-table>
-        </v-col>
-        <v-spacer></v-spacer>
-      </v-row>
       <!-- show parse result end-->
-    </v-col>
-  </v-row>
+  </div>
 </template>
 
 <script lang="ts">
