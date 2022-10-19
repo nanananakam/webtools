@@ -93,6 +93,12 @@ export default {
   sitemap: {
     path: '/sitemap.xml',
     hostname: 'https://www.nanananakam.com',
+    filter ({ routes }) {
+      return routes.map(route => {
+        route.url = `${route.url}/`
+        return route
+      })
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
