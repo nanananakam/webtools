@@ -6,6 +6,8 @@
       <div>フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します、</div>
       <br>
       <v-textarea solo v-model="inputString"></v-textarea>
+      <v-btn v-on:click="clearString">クリア</v-btn>
+      <br>
       <v-data-table :headers="commonDataTableHeaders" :items="resultDataTableItems" hide-default-footer></v-data-table>
     </v-col>
     <v-spacer></v-spacer>
@@ -97,7 +99,7 @@ export default Vue.extend({
           })
           .reduce((a, b) => {
             return a + b;
-          })
+          },0)
         return twitterNum.toString() + "/140"
     },
     resultDataTableItems(): commonDataTableItem[]{
@@ -123,6 +125,11 @@ export default Vue.extend({
           value: this.twitterNumString
         }
       ]
+    }
+  },
+  methods: {
+    clearString: function(){
+      this.inputString = ""
     }
   }
 })
