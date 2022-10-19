@@ -36,7 +36,6 @@
       <v-container>
         <Nuxt />
       </v-container>
-      <div class="text-center"><NinjaAdMaxHorizontal></NinjaAdMaxHorizontal></div>
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
@@ -48,13 +47,9 @@
 <script lang="ts">
 import Vue from "vue";
 import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter} from "@mdi/js";
-import NinjaAdMaxHorizontal from "~/components/ninjaAdMaxHorizontal.vue";
 
 export default Vue.extend({
   name: 'DefaultLayout',
-  components:{
-    NinjaAdMaxHorizontal
-  },
   data() {
     return {
       clipped: false,
