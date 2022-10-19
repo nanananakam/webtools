@@ -32,11 +32,13 @@
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer />
     </v-app-bar>
+    <v-spacer></v-spacer>
     <v-main>
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
+    <v-spacer></v-spacer>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
       <span class="ml-5"><a href="/about/">プライバシーポリシー・免責事項</a></span>
@@ -101,7 +103,7 @@ export default Vue.extend({
       if ( this.$route.fullPath.startsWith('/unixtime')){
         return "UnixTime便利ツール"
       }
-      if ( this.$route.fullPath.startsWith('/unixtime')){
+      if ( this.$route.fullPath.startsWith('/whois')){
         return "IP情報確認ツール"
       }
       if ( this.$route.fullPath.startsWith('/length')){

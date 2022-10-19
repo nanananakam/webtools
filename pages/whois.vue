@@ -1,7 +1,5 @@
 <template>
-  <v-row>
-    <v-spacer></v-spacer>
-    <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+  <div>
       <h1>IP情報確認ツール</h1>
       <div>入力されたIPに関する情報をRDAP(whois)、IP2Location LITE(<a href="https://lite.ip2location.com">https://lite.ip2location.com</a>)、ipapi(<a href="https://ipapi.co/">https://ipapi.co/</a>)から一括取得し表示します。</div>
       <v-form @submit.prevent="onSubmit" ref="form" v-model="valid">
@@ -33,9 +31,7 @@
       <v-data-table v-if="ipApiDataTableItems.length>0 || ipApiLoading" :headers="commonDataTableHeaders" :items="ipApiDataTableItems" :loading="ipApiLoading" :items-per-page="minusOne" hide-default-footer></v-data-table>
       <br>
       <div>This site or product includes IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.</div>
-    </v-col>
-    <v-spacer></v-spacer>
-  </v-row>
+  </div>
 </template>
 
 <script lang="ts">
