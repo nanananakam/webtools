@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical} from "@mdi/js";
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -74,10 +74,15 @@ export default Vue.extend({
           to: '/length/'
         },
         {
+          icon: mdiArrowCollapseVertical,
+          title: "文字列ハッシュ化ツール",
+          to: '/hash/'
+        },
+        {
           icon: mdiInformation,
           title: "このサイトについて",
           to: '/about/'
-        }
+        },
       ],
       miniVariant: false,
       right: true,
@@ -108,6 +113,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/length')){
         return "文字数カウントツール"
+      }
+      if ( this.$route.fullPath.startsWith('/hash')){
+        return "文字列ハッシュ化ツール"
       }
       if ( this.$route.fullPath.startsWith('/about')){
         return "このサイトについて"
