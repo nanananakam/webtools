@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline} from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline, mdiQrcodeEdit } from "@mdi/js";
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -82,6 +82,11 @@ export default Vue.extend({
           icon: mdiFileArrowLeftRightOutline,
           title: "Base64ツール",
           to: '/base64/'
+        },
+        {
+          icon: mdiQrcodeEdit,
+          title: "QRコード作成ツール",
+          to: "/qrcode/"
         },
         {
           icon: mdiInformation,
@@ -124,6 +129,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/base64')){
         return "Base64エンコード・デコードツール"
+      }
+      if ( this.$route.fullPath.startsWith('/qrcode')){
+        return "QRコード作成ツール"
       }
       if ( this.$route.fullPath.startsWith('/about')){
         return "このサイトについて"
