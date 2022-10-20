@@ -4,9 +4,21 @@
       <div>入力された画像からQRコードを生成します。</div>
       <br>
       <v-text-field v-model="inputString" @change="createQr"></v-text-field>
+      <v-radio-group
+        label="誤り訂正レベル"
+        v-model="errorCorrectionLevel"
+        row
+      >
+        <v-radio label="L(~7%)" value="L"></v-radio>
+        <v-radio label="M(~15%)" value="M"></v-radio>
+        <v-radio label="Q(~25%)" value="Q"></v-radio>
+        <v-radio label="H(=35%)" value="H"></v-radio>
+      </v-radio-group>
       <v-btn type="submit" v-on:click="createQr">生成</v-btn>
       <br>
-      <canvas id="qrcode-result-canvas"></canvas>
+      <img v-if="resultDataUrl" :src="resultDataUrl">
+      <br>
+      <a v-if="resultDataUrl" :href="resultDataUrl" download>ダウンロード</a>
     </div>
 </template>
 
@@ -15,7 +27,9 @@ import Vue from "vue";
 import QRCode from "qrcode";
 
 interface PageData {
-  inputString: string
+  inputString: string,
+  resultDataUrl: string | null
+  errorCorrectionLevel: QRCode.QRCodeErrorCorrectionLevel
 }
 
 export default Vue.extend({
@@ -25,14 +39,20 @@ export default Vue.extend({
   },
   data():PageData {
     return {
-      inputString:""
+      inputString:"",
+      resultDataUrl:null,
+      errorCorrectionLevel:"M",
     }
   },
   methods: {
     createQr():void {
-      const canvas = document.getElementById("qrcode-result-canvas")
-      QRCode.toCanvas(canvas, this.inputString, function (error) {
-        console.log(error)
+      const self = this
+      QRCode.toDataURL(this.inputString, { errorCorrectionLevel:this.errorCorrectionLevel },function (error, url) {
+        if (error) {
+          console.log(error)
+        } else {
+          self.resultDataUrl = url
+        }
       })
     }
   }
