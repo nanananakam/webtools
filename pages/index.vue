@@ -2,7 +2,7 @@
   <div>
     <h1>nanananakam webtools</h1>
     <div>Web開発・運用であるとうれしいちょっとしたツール集です。</div>
-    <v-card class="ma-10" v-for="item in items">
+    <v-card class="ma-10 px-5 pb-5" v-for="item in items">
       <v-card-title><a :href="item.to"><v-icon>{{item.icon}}</v-icon>{{item.title}}</a></v-card-title>
       <v-card-tetx>{{item.text}}</v-card-tetx>
     </v-card>
@@ -72,7 +72,7 @@ export default Vue.extend({
           icon: mdiQrcodeEdit,
           title: "QRコード作成ツール",
           to: "/qrcode/",
-          text: "入力された文字列からQRコードを生成します。"
+          text: "入力された文字列からQRコードを生成します。ダウンロードもできます。"
         },
         {
           icon: mdiInformation,
