@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>QRコード生成ツール</h1>
-      <div>入力された画像からQRコードを生成します。</div>
+      <div>入力された文字列からQRコードを生成します。</div>
       <br>
       <v-text-field v-model="inputString" @change="createQr"></v-text-field>
       <v-radio-group
