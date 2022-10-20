@@ -25,7 +25,19 @@
 export default {
   name: "about",
   head: {
-    title: "このサイトについて"
+    title: "このサイトについて",
+    meta: [
+      { name: 'description', content: 'Web開発・運用であるとうれしいちょっとしたツール集です。' },
+      { property: 'og:site_name', content: 'nanananakam webtools' },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: 'nanananakam webtools' },
+      { property: 'og:description', content: 'Web開発・運用であるとうれしいちょっとしたツール集です。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/' }, //このページに直接飛んでくるのはあまり望まないのでトップに飛ばす
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   }
 }
 </script>

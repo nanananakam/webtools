@@ -1,7 +1,7 @@
 <template>
     <div>
       <h1>QRコード生成ツール</h1>
-      <div>入力された文字列からQRコードを生成します。</div>
+      <div>入力された文字列からQRコードを生成します。ダウンロードもできます。</div>
       <br>
       <v-text-field v-model="inputString" @change="createQr"></v-text-field>
       <v-radio-group
@@ -35,7 +35,19 @@ interface PageData {
 export default Vue.extend({
   name: "qrcode",
   head: {
-    title: "QRコード生成ツール"
+    title: "QRコード生成ツール",
+    meta: [
+      { name: 'description', content: '入力された文字列からQRコードを生成します。ダウンロードもできます。' },
+      { property: 'og:site_name', content: 'nanananakam-webtools' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:title', content: 'QRコード生成ツール' },
+      { property: 'og:description', content: '入力された文字列からQRコードを生成します。ダウンロードもできます。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/qrcode/' },
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   },
   data():PageData {
     return {

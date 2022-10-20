@@ -122,7 +122,19 @@ interface ResultOtherDataTableItem{
 export default Vue.extend({
   name: "unixtime",
   head: {
-    title:"UnixTime便利ツール"
+    title:"UnixTime便利ツール",
+    meta: [
+      { name: 'description', content: 'UnixTimeを始めとした様々な形式で時刻を入力し、形式変換やTimeZone変更、加減算ができます。' },
+      { property: 'og:site_name', content: 'nanananakam-webtools' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:title', content: 'UnixTime便利ツール' },
+      { property: 'og:description', content: 'UnixTimeを始めとした様々な形式で時刻を入力し、形式変換やTimeZone変更、加減算ができます。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/unixtime/' },
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   },
   components:{
     ValueToClipboard

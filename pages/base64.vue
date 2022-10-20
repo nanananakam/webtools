@@ -32,7 +32,19 @@ interface PageData {
 export default Vue.extend({
   name: "base64",
   head: {
-    title: "Base64エンコード・デコードツール"
+    title: "Base64エンコード・デコードツール",
+    meta: [
+      { name: 'description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。' },
+      { property: 'og:site_name', content: 'nanananakam-webtools' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:title', content: 'Base64エンコード・デコードツール' },
+      { property: 'og:description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/base64/' },
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   },
   data(): PageData {
     return {
