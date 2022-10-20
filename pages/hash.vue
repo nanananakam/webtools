@@ -34,7 +34,19 @@ interface PageData {
 export default Vue.extend({
   name: "hash",
   head: {
-    title: "文字列ハッシュ化ツール"
+    title: "文字列ハッシュ化ツール",
+    meta: [
+      { name: 'description', content: '入力された文字列をmd5,sha1,sha256でハッシュ化し、HEX形式,Base64形式で出力します。' },
+      { property: 'og:site_name', content: 'nanananakam-webtools' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:title', content: '文字列ハッシュ化ツール' },
+      { property: 'og:description', content: '入力された文字列をmd5,sha1,sha256でハッシュ化し、HEX形式,Base64形式で出力します。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/hash/' },
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   },
   components:{
     ValueToClipboard

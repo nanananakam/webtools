@@ -29,7 +29,19 @@ interface PageData {
 export default Vue.extend({
   name: "length",
   head: {
-    title:"文字数カウントツール"
+    title:"文字数カウントツール",
+    meta: [
+      { name: 'description', content: 'フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します。' },
+      { property: 'og:site_name', content: 'nanananakam-webtools' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:title', content: '文字数カウントツール' },
+      { property: 'og:description', content: 'フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/length/' },
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   },
   data(): PageData{
     let textEncoder = null

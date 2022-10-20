@@ -111,7 +111,19 @@ interface PageData {
 export default Vue.extend({
   name: "whois",
   head: {
-    title: "IP情報確認ツール"
+    title: "IP情報確認ツール",
+    meta: [
+      { name: 'description', content: '入力されたIPに関する情報をRDAP(whois)、IP2Location LITE、ipapiから一括取得し表示します。' },
+      { property: 'og:site_name', content: 'nanananakam-webtools' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:title', content: 'IP情報確認ツール' },
+      { property: 'og:description', content: '入力されたIPに関する情報をRDAP(whois)、IP2Location LITE、ipapiから一括取得し表示します。' },
+      { property: 'og:url', content: 'https://www.nanananakam.com/whois/' },
+      //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
+      { name: 'twitter:card', content: 'summary' },
+      //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
+      //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ]
   },
   data(): PageData{
     return {
