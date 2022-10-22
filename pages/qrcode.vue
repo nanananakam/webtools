@@ -37,11 +37,11 @@ export default Vue.extend({
   head: {
     title: "QRコード生成ツール",
     meta: [
-      { name: 'description', content: '入力された文字列からQRコードを生成します。ダウンロードもできます。' },
+      { name: 'description', content: '入力された文字列からQRコードを作成します。ダウンロードもできます。' },
       { property: 'og:site_name', content: 'nanananakam-webtools' },
       { property: 'og:type', content: 'article' },
-      { property: 'og:title', content: 'QRコード生成ツール' },
-      { property: 'og:description', content: '入力された文字列からQRコードを生成します。ダウンロードもできます。' },
+      { property: 'og:title', content: 'QRコード作成ツール' },
+      { property: 'og:description', content: '入力された文字列からQRコードを作成します。ダウンロードもできます。' },
       { property: 'og:url', content: 'https://www.nanananakam.com/qrcode/' },
       //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
       { name: 'twitter:card', content: 'summary' },
