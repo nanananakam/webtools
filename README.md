@@ -8,6 +8,10 @@ Hosted by Cloudflare Pages
 ## Features
 - UnixTime便利ツール ( https://www.nanananakam.com/unixtime/ )
 - IP情報確認ツール ( https://www.nanananakam.com/whois/ )
+- 文字数カウントツール ( https://www.nanananakam.com/length/ )
+- 文字列ハッシュ化ツール ( https://www.nanananakam.com/hash/ )
+- Base64エンコード・デコードツール ( https://www.nanananakam.com/base64/ )
+- QRコード作成ツール ( https://www.nanananakam.com/qrcode/ )
 
 ## Build Setup
 
