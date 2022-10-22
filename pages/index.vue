@@ -72,7 +72,7 @@ export default Vue.extend({
           icon: mdiQrcodeEdit,
           title: "QRコード作成ツール",
           to: "/qrcode/",
-          text: "入力された文字列からQRコードを生成します。ダウンロードもできます。"
+          text: "入力された文字列からQRコードを作成します。ダウンロードもできます。"
         },
         {
           icon: mdiInformation,
