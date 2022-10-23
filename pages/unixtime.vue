@@ -63,7 +63,7 @@ import {DateTime} from 'luxon';
 import Vue from "vue";
 
 import {getTimeZones} from "@vvo/tzdb";
-import ValueToClipboard from "~/components/valueToClipboard.vue";
+import ValueToClipboard from "../components/valueToClipboard.vue";
 import {DataTableHeader} from "vuetify";
 
 const FORMAT_TYPE = {
