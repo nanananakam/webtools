@@ -1,6 +1,6 @@
 <template>
   <div class="text-center py-16">
-    <div v-if="adNumber===1"><!-- お名前.com -->
+    <div v-show="adNumber===1"><!-- お名前.com -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NL1XD+CM9RCI+50+2HN8K1" rel="nofollow">
@@ -20,7 +20,7 @@
         <img border="0" width="1" height="1" src="https://www15.a8.net/0.gif?a8mat=3NL1XD+CM9RCI+50+2HBVLT" alt="">
       </div>
     </div>
-    <div v-if="adNumber===2"><!-- mixhost -->
+    <div v-show="adNumber===2"><!-- mixhost -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NL1XD+CKHGJ6+3JTE+62U35" rel="nofollow">
@@ -40,7 +40,7 @@
         <img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=3NL1XD+CKHGJ6+3JTE+5ZMCH" alt="">
       </div>
     </div>
-    <div v-if="adNumber===3"><!-- エックスサーバー -->
+    <div v-show="adNumber===3"><!-- エックスサーバー -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+6AU69E+CO4+6ARKX" rel="nofollow">
@@ -60,7 +60,7 @@
         <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=3NLC3K+6AU69E+CO4+64C3L" alt="">
       </div>
     </div>
-    <div v-if="adNumber===4"><!-- Xserverドメイン -->
+    <div v-show="adNumber===4"><!-- Xserverドメイン -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+7IATF6+CO4+15TP8X" rel="nofollow">
@@ -80,7 +80,7 @@
         <img border="0" width="1" height="1" src="https://www11.a8.net/0.gif?a8mat=3NLC3K+7IATF6+CO4+15XK4X" alt="">
       </div>
     </div>
-    <div v-if="adNumber===5"><!-- 「ロリポップ！」レンタルサーバー -->
+    <div v-show="adNumber===5"><!-- 「ロリポップ！」レンタルサーバー -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+84BUSY+348+6OHEP" rel="nofollow">
@@ -100,7 +100,7 @@
         <img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat=3NLC3K+84BUSY+348+6ARKX" alt="">
       </div>
     </div>
-    <div v-if="adNumber===6"><!-- 「ムームードメイン」独自ドメイン -->
+    <div v-show="adNumber===6"><!-- 「ムームードメイン」独自ドメイン -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+9FD3LE+348+1C71F5" rel="nofollow">
@@ -120,7 +120,7 @@
         <img border="0" width="1" height="1" src="https://www14.a8.net/0.gif?a8mat=3NLC3K+9FD3LE+348+1C6LZL" alt="">
       </div>
     </div>
-    <div v-if="adNumber===7"><!-- WordPress専用の超高速クラウド型レンタルサーバー【wpX Speed】 -->
+    <div v-show="adNumber===7"><!-- WordPress専用の超高速クラウド型レンタルサーバー【wpX Speed】 -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+A4YQLU+CO4+103AOX" rel="nofollow">
@@ -140,7 +140,7 @@
         <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=3NLC3K+A4YQLU+CO4+ZTV6P" alt="">
       </div>
     </div>
-    <div v-if="adNumber===8"><!--  	【A8.net】開発/運用エンジニア募集プログラム -->
+    <div v-show="adNumber===8"><!--  	【A8.net】開発/運用エンジニア募集プログラム -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+BE7OKY+0K+15RCDD" rel="nofollow">
@@ -160,7 +160,7 @@
         <img border="0" width="1" height="1" src="https://www11.a8.net/0.gif?a8mat=3NLC3K+BE7OKY+0K+15RK35" alt="">
       </div>
     </div>
-    <div v-if="adNumber===9"><!--  フリーランスエンジニア向け案件紹介サービス【IT求人ナビ フリーランス】 -->
+    <div v-show="adNumber===9"><!--  フリーランスエンジニア向け案件紹介サービス【IT求人ナビ フリーランス】 -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+E1H1DE+4LXM+61JSH" rel="nofollow">
@@ -180,7 +180,7 @@
         <img border="0" width="1" height="1" src="https://www18.a8.net/0.gif?a8mat=3NLC3K+E1H1DE+4LXM+669JL" alt="">
       </div>
     </div>
-    <div v-if="adNumber===10"><!--  フリーランスエンジニアに安心保障と豊富な案件紹介を【Midworks】 -->
+    <div v-show="adNumber===10"><!--  フリーランスエンジニアに安心保障と豊富な案件紹介を【Midworks】 -->
       <!-- 横幅sm以上(600px～)のみ表示 -->
       <div class="d-none d-sm-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+DZOQK2+3TVC+BXIYP" rel="nofollow">
@@ -194,7 +194,7 @@
         <img border="0" width="1" height="1" src="https://www15.a8.net/0.gif?a8mat=3NLC3K+DZOQK2+3TVC+BY641" alt="">
       </div>
     </div>
-    <div v-if="adNumber===11"><!-- フリーランスエンジニアのためのサイト【Tech Stock】 -->
+    <div v-show="adNumber===11"><!-- フリーランスエンジニアのためのサイト【Tech Stock】 -->
       <!-- 横幅sm以上(600px～)のみ表示 -->
       <div class="d-none d-sm-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+DWPKJ6+3T80+5ZU29" rel="nofollow">
@@ -208,7 +208,7 @@
         <img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=3NLC3K+DWPKJ6+3T80+60H7L" alt="">
       </div>
     </div>
-    <div v-if="adNumber===12"><!-- エンジニア、デザイナー向けの週2、3日のお仕事紹介【ITプロパートナーズ】 -->
+    <div v-show="adNumber===12"><!-- エンジニア、デザイナー向けの週2、3日のお仕事紹介【ITプロパートナーズ】 -->
       <!-- 横幅sm以上(600px～)のみ表示 -->
       <div class="d-none d-sm-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+DT4YWI+40EC+5Z6WX" rel="nofollow">
@@ -222,7 +222,7 @@
         <img border="0" width="1" height="1" src="https://www16.a8.net/0.gif?a8mat=3NLC3K+DT4YWI+40EC+5ZMCH" alt="">
       </div>
     </div>
-    <div v-if="adNumber===13"><!-- 設立から四半世紀！フリーランスエンジニアの独立をサポート【ＰＥ−ＢＡＮＫ】 -->
+    <div v-show="adNumber===13"><!-- 設立から四半世紀！フリーランスエンジニアの独立をサポート【ＰＥ−ＢＡＮＫ】 -->
       <!-- 横幅sm以上(600px～)のみ表示 -->
       <div class="d-none d-sm-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+DSJJAQ+3SLI+609HT" rel="nofollow">
@@ -236,7 +236,7 @@
         <img border="0" width="1" height="1" src="https://www11.a8.net/0.gif?a8mat=3NLC3K+DSJJAQ+3SLI+5ZMCH" alt="">
       </div>
     </div>
-    <div v-if="adNumber===14"><!-- フリーランスでスキルアップしながらしっかり稼ぐ【フューチャリズム】 -->
+    <div v-show="adNumber===14"><!-- フリーランスでスキルアップしながらしっかり稼ぐ【フューチャリズム】 -->
       <!-- 横幅sm以上(600px～)のみ表示 -->
       <div class="d-none d-sm-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+DHTQEQ+3Y9Y+BXIYP" rel="nofollow">
@@ -250,7 +250,7 @@
         <img border="0" width="1" height="1" src="https://www18.a8.net/0.gif?a8mat=3NLC3K+DHTQEQ+3Y9Y+BYDTT" alt="">
       </div>
     </div>
-    <div v-if="adNumber===15"><!--  IT業界特化の転職支援サービス【IT求人ナビ 転職】 -->
+    <div v-show="adNumber===15"><!--  IT業界特化の転職支援サービス【IT求人ナビ 転職】 -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+CLOBQQ+4LXM+C2101" rel="nofollow">
@@ -270,7 +270,7 @@
         <img border="0" width="1" height="1" src="https://www14.a8.net/0.gif?a8mat=3NLC3K+CLOBQQ+4LXM+BZ8OX" alt="">
       </div>
     </div>
-    <div v-if="adNumber===16"><!-- ITエンジニアのための転職エージェント【TechClipsエージェント】 -->
+    <div v-show="adNumber===16"><!-- ITエンジニアのための転職エージェント【TechClipsエージェント】 -->
       <!-- 横幅sm以上(600px～)のみ表示 -->
       <div class="d-none d-sm-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+CI3Q42+3SWM+609HT" rel="nofollow">
@@ -284,7 +284,7 @@
         <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=3NLC3K+CI3Q42+3SWM+5ZEMP" alt="">
       </div>
     </div>
-    <div v-if="adNumber===17"><!-- エンジニアのための転職エージェントサービス「Tech Stars Agent」 -->
+    <div v-show="adNumber===17"><!-- エンジニアのための転職エージェントサービス「Tech Stars Agent」 -->
       <!-- 横幅md以上(960px～)のみ表示 -->
       <div class="d-none d-md-inline">
         <a href="https://px.a8.net/svt/ejp?a8mat=3NLC3K+CFPZOY+3TVC+TUVZL" rel="nofollow">
