@@ -34,11 +34,9 @@
     </v-app-bar>
     <v-spacer></v-spacer>
     <v-main>
-      <ad-horizontal></ad-horizontal>
       <v-container>
         <Nuxt />
       </v-container>
-      <ad-horizontal></ad-horizontal>
     </v-main>
     <v-spacer></v-spacer>
     <v-footer :absolute="!fixed" app>
@@ -50,14 +48,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import AdHorizontal from "~/components/adHorizontal.vue"
 import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline, mdiQrcodeEdit } from "@mdi/js";
 
 export default Vue.extend({
   name: 'DefaultLayout',
-  components: {
-    AdHorizontal
-  },
   data() {
     return {
       clipped: false,
