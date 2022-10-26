@@ -99,20 +99,6 @@ export default Vue.extend({
       rightDrawer: false,
     }
   },
-  beforeMount() {
-    // Cloudflare PagesがDomain-level redirectsに対応していないので仕方なくjs redirectを行う
-    // https://developers.cloudflare.com/pages/platform/redirects/
-    const origin = window.location.origin
-    if (
-      origin.indexOf("www.nanananakam.com")==-1
-      &&
-      origin.indexOf("pages.dev")==-1
-      &&
-      origin.indexOf("localhost")==-1
-    ){
-      window.location.href = "https://www.nanananakam.com"+window.location.pathname
-    }
-  },
   computed: {
     title(): string {
       if ( this.$route.fullPath.startsWith('/unixtime')){
