@@ -173,8 +173,7 @@ export default Vue.extend({
         input:this.inputValue,
         recaptchaToken: token,
       }
-      //直接取得はCORSエラーとなるので、自前の中継サーバーを経由する
-      this.$axios.post<myResponse>("https://aznqwjifqlgiqpq2qhdlrhsffq0wwegf.lambda-url.ap-northeast-1.on.aws/",params)
+      this.$axios.post<myResponse>("https://api.nanananakam.com/whois",params)
         .then(res => {
           this.rdapResponseRaw = res.data.rdapResponseWithGuess.rdapResponseRaw
           this.rdapDataTableItems = [
