@@ -1,15 +1,6 @@
 version: 2.1
 jobs:
-  test:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: arm.medium
-    steps:
-      - checkout
-      - run:
-          name: Test
-          command: docker build -t kix.ocir.io/ax0w66dqmxlm/webtools .
-  build_and_deploy:
+  deploy:
     machine:
       image: ubuntu-2004:current
     resource_class: arm.medium
@@ -58,16 +49,9 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  build:
     jobs:
-      - test:
-          filters:
-            branches:
-              ignore:
-                - main
-  build_and_deploy:
-    jobs:
-      - build_and_deploy:
+      - deploy:
           filters:
             branches:
               only:
