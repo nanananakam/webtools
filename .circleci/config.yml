@@ -1,0 +1,58 @@
+version: 2.1
+jobs:
+  deploy:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "3f:f4:32:08:43:a0:f3:e1:00:2d:07:00:9c:58:ac:47"
+      - run:
+          name: Prepare Oracle Cloud CLI
+          command: |
+            curl -OL https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+            chmod a+x ./install.sh
+            ./install.sh --accept-all-defaults
+            aws s3 cp s3://webtools-private/oci-config . --region ap-osaka-1 --endpoint-url https://ax0w66dqmxlm.compat.objectstorage.ap-osaka-1.oraclecloud.com
+            mkdir ~/.oci
+            mv ./oci-config ~/.oci/config
+            oci setup repair-file-permissions --file /home/circleci/.oci/config
+            oci --version
+      - run:
+          name: Prepare Kubectl
+          command: |
+            curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm64/kubectl"
+            chmod +x ./kubectl
+            ./kubectl version --client
+            aws s3 cp s3://webtools-private/kube-config . --region ap-osaka-1 --endpoint-url https://ax0w66dqmxlm.compat.objectstorage.ap-osaka-1.oraclecloud.com
+            mkdir ~/.kube
+            mv ./kube-config ~/.kube/config
+            chmod 600 ~/.kube/config
+            ./kubectl version
+      - run:
+          name: Prepare Docker Registry
+          command: |
+            mkdir ~/.docker
+            echo ${DOCKER_CONFIG_JSON} > ~/.docker/config.json
+            chmod 600 ~/.docker/config.json
+      - run:
+          name: Docker Build
+          command: docker build -t kix.ocir.io/ax0w66dqmxlm/webtools .
+      - run:
+          name: Docker Push
+          command: docker push kix.ocir.io/ax0w66dqmxlm/webtools
+      - run:
+          name: restart
+          command: ./kubectl rollout restart deployment/webtools-front
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - main
