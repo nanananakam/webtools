@@ -100,7 +100,7 @@ export default Vue.extend({
         {
           icon: mdiListBoxOutline,
           title: "送信ヘッダー確認ツール",
-          to: "/echoHeader"
+          to: "/echoHeader/"
         },
         {
           icon: mdiInformation,
