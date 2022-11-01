@@ -1,43 +1,32 @@
 version: 2.1
 jobs:
-  deploy:
+  build:
     machine:
       image: ubuntu-2004:current
     resource_class: arm.medium
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "3f:f4:32:08:43:a0:f3:e1:00:2d:07:00:9c:58:ac:47"
       - run:
-          name: Prepare Jq
-          command: sudo apt-get update && sudo apt-get install -y jq
+          name: Docker Login
+          command: docker login -u nanananakam -p ${DOCKER_PASSWORD}
+      - restore_cache:
+          key: deps-build-{{ checksum "yarn.lock" }}
       - run:
-          name: Prepare Oracle Cloud CLI
+          name: Resolve Yarn Dependencies
           command: |
-            curl -OL https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
-            chmod a+x ./install.sh
-            ./install.sh --accept-all-defaults
-            aws s3 cp s3://webtools-private/oci-config . --region ap-osaka-1 --endpoint-url https://ax0w66dqmxlm.compat.objectstorage.ap-osaka-1.oraclecloud.com
-            mkdir ~/.oci
-            mv ./oci-config ~/.oci/config
-            oci setup repair-file-permissions --file /home/circleci/.oci/config
-            oci --version
-      - run:
-          name: Prepare Kubectl
-          command: |
-            curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/arm64/kubectl"
-            chmod +x ./kubectl
-            ./kubectl version --client
-            aws s3 cp s3://webtools-private/kube-config . --region ap-osaka-1 --endpoint-url https://ax0w66dqmxlm.compat.objectstorage.ap-osaka-1.oraclecloud.com
-            mkdir ~/.kube
-            mv ./kube-config ~/.kube/config
-            chmod 600 ~/.kube/config
-            ./kubectl version
+            if [ $(ls ./node_modules | wc -l) -lt 10 ]; then
+            docker run -v $(pwd):/webtools-front node:16-bullseye sh -c "cd /webtools-front && yarn install"
+            else
+            echo "Using Cache"
+            fi
+      - save_cache:
+          key: deps-build-{{ checksum "yarn.lock" }}
+          paths:
+            - "node_modules"
       - run:
           name: Prepare Docker Registry
           command: |
-            mkdir ~/.docker
+            mkdir -p ~/.docker
             echo ${DOCKER_CONFIG_JSON} > ~/.docker/config.json
             chmod 600 ~/.docker/config.json
       - run:
@@ -46,18 +35,53 @@ jobs:
       - run:
           name: Docker Push
           command: docker push kix.ocir.io/ax0w66dqmxlm/webtools
+
+  deploy:
+    docker:
+      - image: nanananakam/oracle-cloud-cli
+        auth:
+          username: nanananakam
+          password: $DOCKER_PASSWORD
+    resource_class: small
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "3f:f4:32:08:43:a0:f3:e1:00:2d:07:00:9c:58:ac:47"
       - run:
-          name: restart
-          command: ./kubectl rollout restart deployment/webtools-front
+          name: Prepare Oracle Cloud CLI
+          command: |
+            aws s3 cp s3://webtools-private/oci-config . --region ap-osaka-1 --endpoint-url https://ax0w66dqmxlm.compat.objectstorage.ap-osaka-1.oraclecloud.com
+            mkdir -p ~/.oci
+            mv ./oci-config ~/.oci/config
+            oci setup repair-file-permissions --file ~/.oci/config
+            oci --version
+      - run:
+          name: Prepare Kubectl
+          command: |
+            aws s3 cp s3://webtools-private/kube-config . --region ap-osaka-1 --endpoint-url https://ax0w66dqmxlm.compat.objectstorage.ap-osaka-1.oraclecloud.com
+            mkdir -p ~/.kube
+            mv ./kube-config ~/.kube/config
+            chmod 600 ~/.kube/config
+            kubectl version
+      - run:
+          name: Restart
+          command: kubectl rollout restart deployment/webtools-front
       - run:
           name: Clean Repository
-          command: oci artifacts container image list --repository-name webtools --compartment-id=ocid1.tenancy.oc1..aaaaaaaalgknqefnt2n5iwwmgttljqidwk44kcwegxfgapxobfzi3h3nx3xq | jq '.data.items[] | select(."display-name" | test("unknown")) | .id' | xargs -IID oci artifacts container image delete --image-id ID --force
+          command: oci artifacts container image list --repository-name webtools-front --compartment-id=ocid1.tenancy.oc1..aaaaaaaalgknqefnt2n5iwwmgttljqidwk44kcwegxfgapxobfzi3h3nx3xq | jq '.data.items[] | select(."display-name" | test("unknown")) | .id' | xargs -IID oci artifacts container image delete --image-id ID --force
 
 workflows:
   version: 2
   build:
     jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
       - deploy:
+          requires:
+            - build
           filters:
             branches:
               only:
