@@ -16,7 +16,8 @@ import {
   mdiClockOutline,
   mdiCounter,
   mdiFileArrowLeftRightOutline, mdiInformation,
-  mdiMapMarker, mdiQrcodeEdit
+  mdiMapMarker, mdiQrcodeEdit,
+  mdiListBoxOutline
 } from "@mdi/js";
 export default Vue.extend({
   name: 'IndexPage',
@@ -73,6 +74,12 @@ export default Vue.extend({
           title: "QRコード作成ツール",
           to: "/qrcode/",
           text: "入力された文字列からQRコードを作成します。ダウンロードもできます。"
+        },
+        {
+          icon: mdiListBoxOutline,
+          title: "送信ヘッダー確認ツール",
+          to: "/echoHeader/",
+          text: "お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。",
         },
         {
           icon: mdiInformation,

@@ -32,14 +32,18 @@
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer />
     </v-app-bar>
-    <v-spacer></v-spacer>
     <v-main>
-      <ad-horizontal></ad-horizontal>
-      <v-container>
-        <Nuxt />
-      </v-container>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
+          <ad-horizontal></ad-horizontal>
+          <v-container>
+            <Nuxt />
+          </v-container>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
     </v-main>
-    <v-spacer></v-spacer>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
       <span class="ml-5"><a href="/about/">プライバシーポリシー・免責事項</a></span>
@@ -50,7 +54,7 @@
 <script lang="ts">
 import Vue from "vue";
 import AdHorizontal from "~/components/adHorizontal.vue"
-import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline, mdiQrcodeEdit } from "@mdi/js";
+import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline, mdiQrcodeEdit, mdiListBoxOutline} from "@mdi/js";
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -94,6 +98,11 @@ export default Vue.extend({
           to: "/qrcode/"
         },
         {
+          icon: mdiListBoxOutline,
+          title: "送信ヘッダー確認ツール",
+          to: "/echoHeader"
+        },
+        {
           icon: mdiInformation,
           title: "このサイトについて",
           to: '/about/'
@@ -123,6 +132,9 @@ export default Vue.extend({
       }
       if ( this.$route.fullPath.startsWith('/qrcode')){
         return "QRコード作成ツール"
+      }
+      if ( this.$route.fullPath.startsWith('/echoHeader')){
+        return "送信ヘッダー確認ツール"
       }
       if ( this.$route.fullPath.startsWith('/about')){
         return "このサイトについて"

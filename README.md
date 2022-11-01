@@ -3,6 +3,7 @@
 ## This project is deployed to
 https://www.nanananakam.com/
 
+on Oracle Cloud via CloudFlare
 ## Features
 - UnixTime便利ツール ( https://www.nanananakam.com/unixtime/ )
 - IP情報確認ツール ( https://www.nanananakam.com/whois/ )
@@ -10,6 +11,12 @@ https://www.nanananakam.com/
 - 文字列ハッシュ化ツール ( https://www.nanananakam.com/hash/ )
 - Base64エンコード・デコードツール ( https://www.nanananakam.com/base64/ )
 - QRコード作成ツール ( https://www.nanananakam.com/qrcode/ )
+- 送信ヘッダー確認ツール ( https://www.nanananakam.com/echoHeader )
+
+## Related Repos
+- API https://github.com/nanananakam/webtools-go-api
+- kubernetes https://github.com/nanananakam/webtools-kubernetes
+- Terraform https://github.com/nanananakam/webtools-terraform
 
 ## Build Setup
 
