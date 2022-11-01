@@ -173,7 +173,7 @@ export default Vue.extend({
         input:this.inputValue,
         recaptchaToken: token,
       }
-      this.$axios.post<myResponse>("https://api.nanananakam.com/whois",params)
+      this.$axios.post<myResponse>("https://www.nanananakam.com/api/whois",params)
         .then(res => {
           this.rdapResponseRaw = res.data.rdapResponseWithGuess.rdapResponseRaw
           this.rdapDataTableItems = [
