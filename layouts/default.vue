@@ -38,7 +38,6 @@
       <v-container>
         <Nuxt />
       </v-container>
-      <ad-horizontal></ad-horizontal>
     </v-main>
     <v-spacer></v-spacer>
     <v-footer :absolute="!fixed" app>
