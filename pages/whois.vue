@@ -1,7 +1,7 @@
 <template>
   <div>
       <h1>IP情報確認ツール</h1>
-      <div>入力されたIPに関する国などの情報を<a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data">GeoLite2</a>、RDAP(whois)、<a href="https://lite.ip2location.com">IP2Location LITE</a>、<a href="https://ipapi.co/">ipapi</a>から一括取得し表示します。IPv4とIPv6の両方に対応します。:w
+      <div>入力されたIPに関する国や推定座標などの情報を<a href="https://dev.maxmind.com/geoip/geolite2-free-geolocation-data">GeoLite2</a>、RDAP(whois)、<a href="https://lite.ip2location.com">IP2Location LITE</a>、<a href="https://ipapi.co/">ipapi</a>から一括取得し表示します。IPv4とIPv6の両方に対応します。
       </div>
       <v-form @submit.prevent="onSubmit" ref="form" v-model="valid">
         <v-text-field label="IPアドレス" v-model="inputValue" :rules="ipRules"></v-text-field>
@@ -19,7 +19,11 @@
       <br>
       <h2 v-if="geoIp2DataTableItems.length>0 || loading">GeoLite2取得結果</h2>
       <v-data-table v-if="geoIp2DataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="geoIp2DataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
-      <v-switch v-if="geoIp2DataTableItems.length>0 || loading" :headers="commonDataTableHeaders" v-model="showRawResponse" label="生レスポンスを表示"></v-switch>
+      <client-only>
+        <h3>推定位置</h3>
+        <iframe v-if="geoIp2MapIframeUrl.length>0" :src="geoIp2MapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </client-only>
+    <v-switch v-if="geoIp2DataTableItems.length>0 || loading" :headers="commonDataTableHeaders" v-model="showRawResponse" label="生レスポンスを表示"></v-switch>
       <div v-if="showRawResponse && geoIp2Raw">
         <h3>生レスポンス</h3>
         <v-textarea disabled v-model="geoIp2Raw"></v-textarea>
@@ -34,9 +38,17 @@
       <br>
       <h2 v-if="ip2LocationDataTableItems.length>0 || loading">IP2Location LITE 取得結果</h2>
       <v-data-table v-if="ip2LocationDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="ip2LocationDataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
+    <client-only>
+      <h3>推定位置</h3>
+      <iframe v-if="ip2LocationMapIframeUrl.length>0" :src="ip2LocationMapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </client-only>
       <br>
       <h2 v-if="ipApiDataTableItems.length>0 || ipApiLoading">ipapi 取得結果</h2>
       <v-data-table v-if="ipApiDataTableItems.length>0 || ipApiLoading" :headers="commonDataTableHeaders" :items="ipApiDataTableItems" :loading="ipApiLoading" :items-per-page="minusOne" hide-default-footer></v-data-table>
+    <client-only>
+      <h3>推定位置</h3>
+      <iframe v-if="ipApiMapIframeUrl.length>0" :src="ipApiMapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </client-only>
       <br>
       <div>This product includes GeoLite2 data created by MaxMind, available from<a href="https://www.maxmind.com">https://www.maxmind.com</a>.</div>
       <div>This site or product includes IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.</div>
@@ -178,7 +190,9 @@ interface PageData {
   rdapDataTableItems: commonDataTableItem[],
   rdapResponseRaw: string,
   ip2LocationDataTableItems: commonDataTableItem[],
+  ip2LocationMapIframeUrl: string,
   ipApiDataTableItems: commonDataTableItem[],
+  ipApiMapIframeUrl: string,
   commonDataTableHeaders: DataTableHeader[],
   showRawResponse: boolean,
   loading: boolean,
@@ -189,6 +203,7 @@ interface PageData {
   valid: boolean,
   geoIp2Raw: string,
   geoIp2DataTableItems: commonDataTableItem[],
+  geoIp2MapIframeUrl: string,
 }
 
 export default Vue.extend({
@@ -220,9 +235,12 @@ export default Vue.extend({
       inputValue:"",
       rdapDataTableItems: [],
       ip2LocationDataTableItems: [],
+      ip2LocationMapIframeUrl: "",
       ipApiDataTableItems: [],
+      ipApiMapIframeUrl: "",
       geoIp2Raw: "",
       geoIp2DataTableItems: [],
+      geoIp2MapIframeUrl: "",
       commonDataTableHeaders: [
         {
           text: "",
@@ -261,6 +279,11 @@ export default Vue.extend({
       this.$axios.post<myResponse>("https://www.nanananakam.com/api/whois",params)
         .then(res => {
           this.geoIp2Raw = JSON.stringify(res.data.geoIp2LocationCity,null,2)
+          if ( res.data.geoIp2LocationCity.Location.Latitude !=0 || res.data.geoIp2LocationCity.Location.Longitude != 0) {
+            this.geoIp2MapIframeUrl = "https://maps.google.co.jp/maps?output=embed&ll=" + res.data.geoIp2LocationCity.Location.Latitude.toString() + "," + res.data.geoIp2LocationCity.Location.Longitude.toString() + "&t=m&hl=ja&z=10"
+          } else {
+            this.geoIp2MapIframeUrl = ""
+          }
           this.geoIp2DataTableItems = [
             {
               key: "Country-IsoCode",
@@ -341,6 +364,11 @@ export default Vue.extend({
             }
             return { key:"",value:""}
           }).filter( x => x.key.length > 0)
+          if ( res.data.ip2LocationRecord.Latitude && res.data.ip2LocationRecord.Longitude) {
+            this.ip2LocationMapIframeUrl = "https://maps.google.co.jp/maps?output=embed&ll=" + res.data.ip2LocationRecord.Latitude.toString() + "," + res.data.ip2LocationRecord.Longitude.toString() + "&t=m&hl=ja&z=10";
+          } else {
+            this.ip2LocationMapIframeUrl = ""
+          }
           this.loading = false
         })
         .catch((err: AxiosError<myResponse>) => {
@@ -362,6 +390,11 @@ export default Vue.extend({
               }
             }
           })
+          if ( res.data.latitude && res.data.longitude) {
+            this.ipApiMapIframeUrl = "https://maps.google.co.jp/maps?output=embed&ll=" + res.data.latitude.toString() + "," + res.data.longitude.toString() + "&t=m&hl=ja&z=10";
+          } else {
+            this.ipApiMapIframeUrl = ""
+          }
         })
         .catch((err: AxiosError<ipApiResponse>) => {
           this.errors.push("ipapiの取得に失敗しました")

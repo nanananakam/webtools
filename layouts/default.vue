@@ -81,7 +81,7 @@ const pagesInfo:PageInfo[] = [
     icon: mdiMapMarker,
     title: 'IP情報確認ツール',
     to: '/whois/',
-    text: "入力されたIPに関する国などの情報をGeoLite2、RDAP(whois)、IP2Location LITE、ipapiから一括取得し表示します。IPv4とIPv6の両方に対応します。"
+    text: "入力されたIPに関する国や推定座標などの情報をGeoLite2、RDAP(whois)、IP2Location LITE、ipapiから一括取得し表示します。IPv4とIPv6の両方に対応します。"
   },
   {
     icon: mdiCounter,
