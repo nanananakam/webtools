@@ -45,7 +45,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/recaptcha',
     '@nuxtjs/google-adsense',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    'vue-social-sharing/nuxt'
   ],
 
   'google-adsense': {
