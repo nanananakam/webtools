@@ -1,48 +1,43 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
-      <v-spacer />
-    </v-app-bar>
     <v-main>
+      <v-container>
+      <ad-horizontal></ad-horizontal>
+        <div class="text-right">
+          <a href="https://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/v4/public/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+        </div>
+        <div class="share_buttons text-right">　
+        <ShareNetwork
+          network="twitter"
+          :url="url"
+          :title="title"
+          :description="title"
+        >
+        </ShareNetwork>
+        <v-icon large>{{ mdiTwitter }}</v-icon>
+        <ShareNetwork
+          network="facebook"
+          :url="url"
+          :title="title"
+          :description="title"
+        >
+          <v-icon large>{{ mdiFacebook }}</v-icon>
+        </ShareNetwork>
+        <button v-if="isNavigatorShareButton" @click="navigatorShare">
+          <v-icon large>{{ mdiShare }}</v-icon>
+        </button>
+      </div>
+        <Nuxt />
+        <ad-horizontal></ad-horizontal>
       <v-row>
-        <v-spacer></v-spacer>
-        <v-col xs="12" sm="12" md="12" lg="9" xl="6">
-          <ad-horizontal></ad-horizontal>
-          <v-container>
-            <Nuxt />
-          </v-container>
+        <v-col v-for="item in items" cols="12" md="6" lg="4" xl="3">
+          <v-card>
+            <v-card-title><a :href="item.to"><v-icon>{{item.icon}}</v-icon>{{item.title}}</a></v-card-title>
+            <v-card-text>{{item.text}}</v-card-text>
+          </v-card>
         </v-col>
-        <v-spacer></v-spacer>
       </v-row>
+      </v-container>
     </v-main>
     <v-footer :absolute="!fixed" app>
       <span>&copy; 2022-{{ new Date().getFullYear() }} <a href="https://github.com/nanananakam/webtools">nanananakam</a></span>
@@ -54,7 +49,77 @@
 <script lang="ts">
 import Vue from "vue";
 import AdHorizontal from "~/components/adHorizontal.vue"
-import {mdiClockOutline, mdiMapMarker, mdiInformation, mdiCounter, mdiArrowCollapseVertical, mdiFileArrowLeftRightOutline, mdiQrcodeEdit, mdiListBoxOutline} from "@mdi/js";
+import {
+  mdiClockOutline,
+  mdiMapMarker,
+  mdiInformation,
+  mdiCounter,
+  mdiArrowCollapseVertical,
+  mdiFileArrowLeftRightOutline,
+  mdiQrcodeEdit,
+  mdiListBoxOutline,
+  mdiShare,
+  mdiTwitter,
+  mdiFacebook,
+} from "@mdi/js";
+
+interface PageInfo {
+  icon: string,
+  title: string,
+  to: string,
+  text: string,
+}
+
+const pagesInfo:PageInfo[] = [
+  {
+    icon: mdiClockOutline,
+    title: 'UnixTime便利ツール',
+    to: '/unixtime/',
+    text: "UnixTimeを始めとした様々な形式で時刻を入力し、形式変換やTimeZone変更、加減算ができます。"
+  },
+  {
+    icon: mdiMapMarker,
+    title: 'IP情報確認ツール',
+    to: '/whois/',
+    text: "入力されたIPに関する情報をRDAP(whois)、IP2Location LITE、ipapiから一括取得し表示します。"
+  },
+  {
+    icon: mdiCounter,
+    title: '文字数カウントツール',
+    to: '/length/',
+    text: "フォームに入力された文字数を各種エンコードでのユニット数、Unicodeのコードポイント数、書記素数、twitter文字数制限での換算数でそれぞれ表示します。"
+  },
+  {
+    icon: mdiArrowCollapseVertical,
+    title: "文字列ハッシュ化ツール",
+    to: '/hash/',
+    text: "入力された文字列をmd5,sha1,sha256でハッシュ化し、HEX形式,Base64形式で出力します。"
+  },
+  {
+    icon: mdiFileArrowLeftRightOutline,
+    title: "Base64ツール",
+    to: '/base64/',
+    text: "フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。"
+  },
+  {
+    icon: mdiQrcodeEdit,
+    title: "QRコード作成ツール",
+    to: "/qrcode/",
+    text: "入力された文字列からQRコードを作成します。ダウンロードもできます。"
+  },
+  {
+    icon: mdiListBoxOutline,
+    title: "送信ヘッダー確認ツール",
+    to: "/echoHeader/",
+    text: "お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。",
+  },
+  {
+    icon: mdiInformation,
+    title: "このサイトについて",
+    to: '/about/',
+    text: "このサイトについて・プライバシーポリシー・免責事項"
+  },
+]
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -66,80 +131,44 @@ export default Vue.extend({
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: mdiClockOutline,
-          title: 'UnixTime便利ツール',
-          to: '/unixtime/',
-        },
-        {
-          icon: mdiMapMarker,
-          title: 'IP情報確認ツール',
-          to: '/whois/'
-        },
-        {
-          icon: mdiCounter,
-          title: '文字数カウントツール',
-          to: '/length/'
-        },
-        {
-          icon: mdiArrowCollapseVertical,
-          title: "文字列ハッシュ化ツール",
-          to: '/hash/'
-        },
-        {
-          icon: mdiFileArrowLeftRightOutline,
-          title: "Base64ツール",
-          to: '/base64/'
-        },
-        {
-          icon: mdiQrcodeEdit,
-          title: "QRコード作成ツール",
-          to: "/qrcode/"
-        },
-        {
-          icon: mdiListBoxOutline,
-          title: "送信ヘッダー確認ツール",
-          to: "/echoHeader/"
-        },
-        {
-          icon: mdiInformation,
-          title: "このサイトについて",
-          to: '/about/'
-        },
-      ],
+      items: pagesInfo,
       miniVariant: false,
       right: true,
       rightDrawer: false,
+      isNavigatorShareButton: true,
+      mdiShare: mdiShare,
+      mdiTwitter: mdiTwitter,
+      mdiFacebook: mdiFacebook,
     }
+  },
+  mounted() {
+    if (navigator.share === undefined) {
+      this.isNavigatorShareButton = false
+    }
+  },
+  methods: {
+// Web Share APIが使える場合
+    navigatorShare() {
+      if (navigator.share) {
+        navigator.share({
+          title: this.title,
+          text: this.title,
+          url: this.url
+        })
+      }
+    },
   },
   computed: {
     title(): string {
-      if ( this.$route.fullPath.startsWith('/unixtime')){
-        return "UnixTime便利ツール"
+      for ( let pageInfo of pagesInfo) {
+        if ( this.$route.fullPath.startsWith(pageInfo.to)){
+          return pageInfo.title
+        }
       }
-      if ( this.$route.fullPath.startsWith('/whois')){
-        return "IP情報確認ツール"
-      }
-      if ( this.$route.fullPath.startsWith('/length')){
-        return "文字数カウントツール"
-      }
-      if ( this.$route.fullPath.startsWith('/hash')){
-        return "文字列ハッシュ化ツール"
-      }
-      if ( this.$route.fullPath.startsWith('/base64')){
-        return "Base64エンコード・デコードツール"
-      }
-      if ( this.$route.fullPath.startsWith('/qrcode')){
-        return "QRコード作成ツール"
-      }
-      if ( this.$route.fullPath.startsWith('/echoHeader')){
-        return "送信ヘッダー確認ツール"
-      }
-      if ( this.$route.fullPath.startsWith('/about')){
-        return "このサイトについて"
-      }
-      return "nanananakam tools"
+      return "nanananakam webtools"
+    },
+    url(): string {
+      return "https://www.nanananakam.com"+this.$route.fullPath
     }
   }
 })
