@@ -19,9 +19,9 @@
       <br>
       <h2 v-if="geoIp2DataTableItems.length>0 || loading">GeoLite2取得結果</h2>
       <v-data-table v-if="geoIp2DataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="geoIp2DataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
-      <client-only>
+      <client-only v-if="geoIp2MapIframeUrl.length>0">
         <h3>推定位置</h3>
-        <iframe v-if="geoIp2MapIframeUrl.length>0" :src="geoIp2MapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe :src="geoIp2MapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </client-only>
     <v-switch v-if="geoIp2DataTableItems.length>0 || loading" :headers="commonDataTableHeaders" v-model="showRawResponse" label="生レスポンスを表示"></v-switch>
       <div v-if="showRawResponse && geoIp2Raw">
@@ -38,16 +38,16 @@
       <br>
       <h2 v-if="ip2LocationDataTableItems.length>0 || loading">IP2Location LITE 取得結果</h2>
       <v-data-table v-if="ip2LocationDataTableItems.length>0 || loading" :headers="commonDataTableHeaders" :items="ip2LocationDataTableItems" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
-    <client-only>
+    <client-only v-if="ip2LocationMapIframeUrl.length>0">
       <h3>推定位置</h3>
-      <iframe v-if="ip2LocationMapIframeUrl.length>0" :src="ip2LocationMapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe :src="ip2LocationMapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </client-only>
       <br>
       <h2 v-if="ipApiDataTableItems.length>0 || ipApiLoading">ipapi 取得結果</h2>
       <v-data-table v-if="ipApiDataTableItems.length>0 || ipApiLoading" :headers="commonDataTableHeaders" :items="ipApiDataTableItems" :loading="ipApiLoading" :items-per-page="minusOne" hide-default-footer></v-data-table>
-    <client-only>
+    <client-only v-if="ipApiMapIframeUrl.length>0">
       <h3>推定位置</h3>
-      <iframe v-if="ipApiMapIframeUrl.length>0" :src="ipApiMapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe :src="ipApiMapIframeUrl" width="80%" height="450" style="border:0;display: block; margin: 0 auto;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </client-only>
       <br>
       <div>This product includes GeoLite2 data created by MaxMind, available from<a href="https://www.maxmind.com">https://www.maxmind.com</a>.</div>
