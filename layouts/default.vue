@@ -2,41 +2,49 @@
   <v-app>
     <v-main>
       <v-container>
-      <ad-horizontal></ad-horizontal>
+        <ad-horizontal></ad-horizontal>
         <div class="text-right">
-          <a href="https://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/v4/public/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+          <a href="https://b.hatena.ne.jp/entry/" class="hatena-bookmark-button"
+             data-hatena-bookmark-layout="basic-label" data-hatena-bookmark-lang="ja"
+             title="このエントリーをはてなブックマークに追加"><img
+            src="https://b.st-hatena.com/images/v4/public/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加"
+            width="20" height="20" style="border: none;"/></a>
+          <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8"
+                  async="async"></script>
         </div>
         <div class="share_buttons text-right">　
-        <ShareNetwork
-          network="twitter"
-          :url="url"
-          :title="title"
-          :description="title"
-        >
-        </ShareNetwork>
-        <v-icon large>{{ mdiTwitter }}</v-icon>
-        <ShareNetwork
-          network="facebook"
-          :url="url"
-          :title="title"
-          :description="title"
-        >
-          <v-icon large>{{ mdiFacebook }}</v-icon>
-        </ShareNetwork>
-        <button v-if="isNavigatorShareButton" @click="navigatorShare">
-          <v-icon large>{{ mdiShare }}</v-icon>
-        </button>
-      </div>
-        <Nuxt />
+          <ShareNetwork
+            network="twitter"
+            :url="url"
+            :title="title"
+            :description="title"
+          >
+          </ShareNetwork>
+          <v-icon large>{{ mdiTwitter }}</v-icon>
+          <ShareNetwork
+            network="facebook"
+            :url="url"
+            :title="title"
+            :description="title"
+          >
+            <v-icon large>{{ mdiFacebook }}</v-icon>
+          </ShareNetwork>
+          <button v-if="isNavigatorShareButton" @click="navigatorShare">
+            <v-icon large>{{ mdiShare }}</v-icon>
+          </button>
+        </div>
+        <Nuxt/>
         <ad-horizontal></ad-horizontal>
-      <v-row>
-        <v-col v-for="item in items" cols="12" md="6" lg="4" xl="3">
-          <v-card>
-            <v-card-title><a :href="item.to"><v-icon>{{item.icon}}</v-icon>{{item.title}}</a></v-card-title>
-            <v-card-text>{{item.text}}</v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+        <v-row>
+          <v-col v-for="item in items" cols="12" md="6" lg="4" xl="3">
+            <v-card>
+              <v-card-title><a :href="item.to">
+                <v-icon>{{ item.icon }}</v-icon>
+                {{ item.title }}</a></v-card-title>
+              <v-card-text>{{ item.text }}</v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-container>
     </v-main>
     <v-footer :absolute="!fixed" app>
@@ -70,7 +78,7 @@ interface PageInfo {
   text: string,
 }
 
-const pagesInfo:PageInfo[] = [
+const pagesInfo: PageInfo[] = [
   {
     icon: mdiClockOutline,
     title: 'UnixTime便利ツール',
@@ -81,7 +89,7 @@ const pagesInfo:PageInfo[] = [
     icon: mdiMapMarker,
     title: 'IP情報確認ツール',
     to: '/whois/',
-    text: "入力されたIPに関する国や推定座標などの情報をGeoLite2、RDAP(whois)、IP2Location LITE、ipapiから一括取得し表示します。IPv4とIPv6の両方に対応します。"
+    text: "入力されたIPに関する国や推定座標などの情報をGeoLite2、RDAP(whois)、IP2Location LITE、ipapiから一括取得し地図と合わせて表示します。IPv4とIPv6の両方に対応します。"
   },
   {
     icon: mdiCounter,
@@ -105,7 +113,7 @@ const pagesInfo:PageInfo[] = [
     icon: mdiQrcodeEdit,
     title: "QRコード作成ツール",
     to: "/qrcode/",
-    text: "入力された文字列からQRコードを作成します。ダウンロードもできます。"
+    text: "入力された文字列からQRコードを作成します。ダウンロードもできます。誤り訂正レベルを選択できます。"
   },
   {
     icon: mdiListBoxOutline,
@@ -160,15 +168,15 @@ export default Vue.extend({
   },
   computed: {
     title(): string {
-      for ( let pageInfo of pagesInfo) {
-        if ( this.$route.fullPath.startsWith(pageInfo.to)){
+      for (let pageInfo of pagesInfo) {
+        if (this.$route.fullPath.startsWith(pageInfo.to)) {
           return pageInfo.title
         }
       }
       return "nanananakam webtools"
     },
     url(): string {
-      return "https://www.nanananakam.com"+this.$route.fullPath
+      return "https://www.nanananakam.com" + this.$route.fullPath
     }
   }
 })

@@ -7,7 +7,7 @@
       <img border="0" width="1" height="1" :src="horizontalAd.image2_728x90" alt="">
     </div>
     <!-- 横幅sm(600px～960px)のみ表示 -->
-    <div  class="d-none d-sm-inline d-md-none">
+    <div class="d-none d-sm-inline d-md-none">
       <a :href="horizontalAd.href_468x60" rel="nofollow">
         <img border="0" width="468" height="60" alt="" :src="horizontalAd.image1_468x60"></a>
       <img border="0" width="1" height="1" :src="horizontalAd.image2_468x60" alt="">
@@ -167,12 +167,12 @@ export default Vue.extend({
   name: "adHorizontal",
   data(): ComponentData {
     return {
-      horizontalAd: horizontalAds[Math.floor(Math.random()*horizontalAds.length)]
+      horizontalAd: horizontalAds[Math.floor(Math.random() * horizontalAds.length)]
     }
   },
   watch: {
     $route() {
-      this.horizontalAd = horizontalAds[Math.floor(Math.random()*horizontalAds.length)]
+      this.horizontalAd = horizontalAds[Math.floor(Math.random() * horizontalAds.length)]
     },
   },
 })
