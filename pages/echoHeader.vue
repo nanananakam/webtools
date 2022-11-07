@@ -2,7 +2,8 @@
   <div>
     <h1>送信ヘッダー確認ツール</h1>
     <div>お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。</div>
-    <v-data-table :headers="commonDataTableHeaders" :items="result" :loading="loading" :items-per-page="minusOne" hide-default-footer></v-data-table>
+    <v-data-table :headers="commonDataTableHeaders" :items="result" :loading="loading" :items-per-page="minusOne"
+                  hide-default-footer></v-data-table>
     <div>※Cloudflare CDN、Oracle Cloudロードバランサーで付加・変更された情報を含みます。</div>
   </div>
 </template>
@@ -28,19 +29,19 @@ export default Vue.extend({
   head: {
     title: "送信ヘッダー確認ツール",
     meta: [
-      { name: 'description', content: 'お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。' },
-      { property: 'og:site_name', content: 'nanananakam-webtools' },
-      { property: 'og:type', content: 'article' },
-      { property: 'og:title', content: '送信ヘッダー確認ツール' },
-      { property: 'og:description', content: 'お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。' },
-      { property: 'og:url', content: 'https://www.nanananakam.com/echoHeader/' },
+      {name: 'description', content: 'お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。'},
+      {property: 'og:site_name', content: 'nanananakam-webtools'},
+      {property: 'og:type', content: 'article'},
+      {property: 'og:title', content: '送信ヘッダー確認ツール'},
+      {property: 'og:description', content: 'お使いのブラウザから送信されたリクエストをサーバーで受信した際のヘッダー情報を表示します。'},
+      {property: 'og:url', content: 'https://www.nanananakam.com/echoHeader/'},
       //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
-      { name: 'twitter:card', content: 'summary' },
+      {name: 'twitter:card', content: 'summary'},
       //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
       //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
     ]
   },
-  data():PageData {
+  data(): PageData {
     return {
       minusOne: -1,
       result: [],
@@ -60,7 +61,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    this.$axios.post("https://www.nanananakam.com/api/echoHeader",{})
+    this.$axios.post("https://www.nanananakam.com/api/echoHeader", {})
       .then(res => {
         for (let key in res.data) {
           this.result.push({

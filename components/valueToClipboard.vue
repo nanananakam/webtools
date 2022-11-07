@@ -1,14 +1,14 @@
 <template>
-<div>
-  {{text}}
-  <span v-if="copied"><v-icon small>{{ mdiCheck }}</v-icon></span>
-  <span v-else v-on:click="copyText"><v-icon small>{{ mdiContentCopy }}</v-icon></span>
-</div>
+  <div>
+    {{ text }}
+    <span v-if="copied"><v-icon small>{{ mdiCheck }}</v-icon></span>
+    <span v-else v-on:click="copyText"><v-icon small>{{ mdiContentCopy }}</v-icon></span>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { mdiCheck, mdiContentCopy } from "@mdi/js";
+import {mdiCheck, mdiContentCopy} from "@mdi/js";
 
 interface ComponentData {
   copied: boolean,
@@ -26,18 +26,18 @@ export default Vue.extend({
     }
   },
   props: {
-    text:{
-      type:String
+    text: {
+      type: String
     }
   },
   methods: {
-    copyText: function() {
+    copyText: function () {
       navigator.clipboard.writeText(this.text);
       this.copied = true;
       const self = this;
-      setTimeout(function(){
+      setTimeout(function () {
         self.copied = false;
-      },2000);
+      }, 2000);
     }
   }
 })

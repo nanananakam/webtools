@@ -11,6 +11,9 @@
     </v-radio-group>
     <br>
     <v-textarea disabled v-model="result"></v-textarea>
+    <br>
+    <h2>解説</h2>
+    <div>Base64エンコードは、データを印字可能な64種類の英数字記号を用いて表現する形式で、BASIC認証や電子メールなど、ASCII外の文字やバイナリデータを扱うことに制約がある場面でそれらのデータを扱うために利用されます。</div>
   </div>
 </template>
 
@@ -34,27 +37,27 @@ export default Vue.extend({
   head: {
     title: "Base64エンコード・デコードツール",
     meta: [
-      { name: 'description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。' },
-      { property: 'og:site_name', content: 'nanananakam-webtools' },
-      { property: 'og:type', content: 'article' },
-      { property: 'og:title', content: 'Base64エンコード・デコードツール' },
-      { property: 'og:description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。' },
-      { property: 'og:url', content: 'https://www.nanananakam.com/base64/' },
+      {name: 'description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。'},
+      {property: 'og:site_name', content: 'nanananakam-webtools'},
+      {property: 'og:type', content: 'article'},
+      {property: 'og:title', content: 'Base64エンコード・デコードツール'},
+      {property: 'og:description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。'},
+      {property: 'og:url', content: 'https://www.nanananakam.com/base64/'},
       //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
-      { name: 'twitter:card', content: 'summary' },
+      {name: 'twitter:card', content: 'summary'},
       //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
       //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
     ]
   },
   data(): PageData {
     return {
-      inputString:"",
-      convertType:"to_base_64"
+      inputString: "",
+      convertType: "to_base_64"
     }
   },
   computed: {
     result(): string {
-      if (this.convertType == "to_base_64"){
+      if (this.convertType == "to_base_64") {
         return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(this.inputString))
       } else {
         try {
@@ -67,7 +70,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    clearString: function(){
+    clearString: function () {
       this.inputString = ""
     }
   }
