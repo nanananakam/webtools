@@ -39,6 +39,12 @@ export default Vue.extend({
       {name: 'twitter:card', content: 'summary'},
       //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
       //{ name: 'twitter:creator', content: '@{Twitterユーザー名}' }
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: 'https://www.nanananakam.com/echoHeader/'
+      }
     ]
   },
   data(): PageData {
