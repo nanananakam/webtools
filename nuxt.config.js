@@ -9,7 +9,7 @@ export default {
     titleTemplate: '%s - nanananakam-webtools',
     title: 'nanananakam-webtools',
     htmlAttrs: {
-      lang: 'en',
+      lang: 'ja',
     },
     meta: [
       { charset: 'utf-8' },
@@ -108,5 +108,9 @@ export default {
   server: {
     port: 3000,
     host: '0.0.0.0'
+  },
+
+  router: {
+    trailingSlash: true
   }
 }
