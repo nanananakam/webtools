@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Base64エンコード・デコードツール</h1>
+    <h1>Base64文字列エンコード・デコードツール</h1>
     <div>フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。</div>
     <br>
     <v-textarea solo v-model="inputString"></v-textarea>
@@ -35,7 +35,7 @@ interface PageData {
 export default Vue.extend({
   name: "base64",
   head: {
-    title: "Base64エンコード・デコードツール",
+    title: "Base64文字列エンコード・デコードツール",
     meta: [
       {name: 'description', content: 'フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。'},
       {property: 'og:site_name', content: 'nanananakam-webtools'},

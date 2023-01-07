@@ -111,9 +111,15 @@ const pagesInfo: PageInfo[] = [
   },
   {
     icon: mdiFileArrowLeftRightOutline,
-    title: "Base64ツール",
+    title: "Base64文字列ツール",
     to: '/base64/',
     text: "フォームに入力された文字列をBase64に変換、またはBase64から文字列に変換します。"
+  },
+  {
+    icon: mdiFileArrowLeftRightOutline,
+    title: "ファイルBase64ツール",
+    to: '/fileBase64/',
+    text: "入力されたファイルをBase64に変換、またはBase64からファイルに変換します。"
   },
   {
     icon: mdiQrcodeEdit,

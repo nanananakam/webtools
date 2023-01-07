@@ -1,8 +1,8 @@
 <template>
   <div>
-    {{ text }}
-    <span v-if="copied"><v-icon small>{{ mdiCheck }}</v-icon></span>
-    <span v-else v-on:click="copyText"><v-icon small>{{ mdiContentCopy }}</v-icon></span>
+    <span v-if="showText">{{ text }}</span>
+    <v-btn v-if="copied" icon disabled><v-icon small>{{ mdiCheck }}</v-icon></v-btn>
+    <v-btn v-else v-on:click="copyText" icon><v-icon small>{{ mdiContentCopy }}</v-icon></v-btn>
   </div>
 </template>
 
@@ -28,6 +28,10 @@ export default Vue.extend({
   props: {
     text: {
       type: String
+    },
+    showText: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
