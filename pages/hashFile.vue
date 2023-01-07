@@ -1,10 +1,21 @@
 <template>
   <div>
     <h1>ファイルハッシュ確認ツール</h1>
-    <div>入力されたファイルのmd5,sha1,sha256,sha512ハッシュをそれぞれHEX形式,Base64形式で出力します。</div>
+    <div>入力されたファイルのmd5,sha1,sha256,sha512ハッシュをHEX形式またはBase64形式で出力します。</div>
     <br>
-    <v-file-input v-model="inputFile"></v-file-input>
+    <v-file-input v-model="inputFile" label="ファイルを選択してください" show-size></v-file-input>
+    <v-radio-group v-model="hashAlgo" row>
+      <v-radio label="MD5" value="MD5"></v-radio>
+      <v-radio label="SHA1" value="SHA1"></v-radio>
+      <v-radio label="SHA256" value="SHA256"></v-radio>
+      <v-radio label="SHA512" value="SHA512"></v-radio>
+    </v-radio-group>
+    <v-radio-group v-model="hashFormat" row>
+      <v-radio label="HEX形式" value="HEX"></v-radio>
+      <v-radio label="Base64形式" value="Base64"></v-radio>
+    </v-radio-group>
     <v-btn v-on:click="exec">ハッシュ生成</v-btn>
+    <v-btn v-if="inputFile != null" v-on:click="clear">クリア</v-btn>
     <br>
     <v-data-table :headers="commonDataTableHeaders" :items="resultDataTableItems"  :loading="loading" hide-default-footer>
       <template v-slot:item.value="{ item }">
@@ -35,14 +46,31 @@ import Vue from "vue";
 import CryptoJS from "crypto-js"
 import {DataTableHeader} from "vuetify";
 import ValueToClipboard from "../components/valueToClipboard.vue";
+import * as constants from "constants";
 
 interface commonDataTableItem {
   key: string,
   value: string,
 }
 
+const HASH_ALGO = {
+  MD5: "MD5",
+  SHA1: "SHA1",
+  SHA256: "SHA256",
+  SHA512: "SHA512"
+} as const
+type HASH_ALGO = typeof HASH_ALGO[keyof typeof HASH_ALGO]
+
+const HASH_FORMAT = {
+  HEX: "HEX",
+  BASE64: "Base64"
+} as const
+type HASH_FORMAT = typeof HASH_FORMAT[keyof typeof HASH_FORMAT]
+
 interface PageData {
   inputFile: File | null
+  hashAlgo: HASH_ALGO,
+  hashFormat: HASH_FORMAT,
   commonDataTableHeaders: DataTableHeader[],
   resultDataTableItems: commonDataTableItem[],
   loading: boolean
@@ -53,11 +81,11 @@ export default Vue.extend({
   head: {
     title: "ファイルハッシュ確認ツール",
     meta: [
-      {name: 'description', content: '入力されたファイルのmd5,sha1,sha256,sha512ハッシュをそれぞれHEX形式,Base64形式で出力します。'},
+      {name: 'description', content: '入力されたファイルのmd5,sha1,sha256,sha512ハッシュをHEX形式またはBase64形式で出力します。'},
       {property: 'og:site_name', content: 'nanananakam-webtools'},
       {property: 'og:type', content: 'article'},
       {property: 'og:title', content: 'ファイルハッシュ化ツール'},
-      {property: 'og:description', content: '入力されたファイルのmd5,sha1,sha256,sha512ハッシュをそれぞれHEX形式,Base64形式で出力します。'},
+      {property: 'og:description', content: '入力されたファイルのmd5,sha1,sha256,sha512ハッシュをHEX形式またはBase64形式で出力します。'},
       {property: 'og:url', content: 'https://www.nanananakam.com/hashFile/'},
       //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
       {name: 'twitter:card', content: 'summary'},
@@ -77,40 +105,9 @@ export default Vue.extend({
   data(): PageData {
     return {
       inputFile: null,
-      resultDataTableItems: [
-        {
-          key: "MD5(HEX形式)",
-          value: ""
-        },
-        {
-          key: "MD5(Base64形式)",
-          value: ""
-        },
-        {
-          key: "SHA1(HEX形式)",
-          value: ""
-        },
-        {
-          key: "SHA1(Base64形式)",
-          value: ""
-        },
-        {
-          key: "SHA256(HEX形式)",
-          value: ""
-        },
-        {
-          key: "SHA256(Base64形式)",
-          value: ""
-        },
-        {
-          key: "SHA512(HEX形式)",
-          value: ""
-        },
-        {
-          key: "SHA512(Base64形式)",
-          value: ""
-        }
-      ],
+      hashAlgo: "MD5",
+      hashFormat: "HEX",
+      resultDataTableItems: [],
       commonDataTableHeaders: [
         {
           "text": "ハッシュ化方法",
@@ -127,6 +124,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    clear: function () {
+      this.inputFile = null
+      this.setNull()
+    },
     exec: function () {
       if (this.inputFile == null) {
         this.setNull()
@@ -146,51 +147,34 @@ export default Vue.extend({
             } else {
               // @ts-ignore
               const inputWordArray = CryptoJS.lib.WordArray.create(arrayBuffer)
-              const md5 = CryptoJS.MD5(inputWordArray)
-              const md5hex = md5.toString(CryptoJS.enc.Hex)
-              const md5base64 = md5.toString(CryptoJS.enc.Base64)
-              const sha1 = CryptoJS.SHA1(inputWordArray)
-              const sha1hex = sha1.toString(CryptoJS.enc.Hex)
-              const sha1base64 = sha1.toString(CryptoJS.enc.Base64)
-              const sha256 = CryptoJS.SHA256(inputWordArray)
-              const sha256hex = sha256.toString(CryptoJS.enc.Hex)
-              const sha256base64 = sha256.toString(CryptoJS.enc.Base64)
-              const sha512 = CryptoJS.SHA512(inputWordArray)
-              const sha512hex = sha512.toString(CryptoJS.enc.Hex)
-              const sha512base64 = sha512.toString(CryptoJS.enc.Base64)
+              let hashedWordArray = CryptoJS.lib.WordArray.create()
+              switch(t.hashAlgo){
+                case "MD5":
+                  hashedWordArray = CryptoJS.MD5(inputWordArray)
+                  break;
+                case "SHA1":
+                  hashedWordArray = CryptoJS.SHA1(inputWordArray)
+                  break;
+                case "SHA256":
+                  hashedWordArray = CryptoJS.SHA256(inputWordArray)
+                  break;
+                case "SHA512":
+                  hashedWordArray = CryptoJS.SHA512(inputWordArray)
+                  break;
+              }
+              let hashedString = ""
+              switch (t.hashFormat) {
+                case "HEX":
+                  hashedString = hashedWordArray.toString(CryptoJS.enc.Hex)
+                  break;
+                case "Base64":
+                  hashedString = hashedWordArray.toString(CryptoJS.enc.Base64)
+              }
               t.resultDataTableItems = [
                 {
-                  key: "MD5(HEX形式)",
-                  value: md5hex
+                  key: t.hashAlgo+"("+t.hashFormat+"形式)",
+                  value: hashedString
                 },
-                {
-                  key: "MD5(Base64形式)",
-                  value: md5base64
-                },
-                {
-                  key: "SHA1(HEX形式)",
-                  value: sha1hex
-                },
-                {
-                  key: "SHA1(Base64形式)",
-                  value: sha1base64
-                },
-                {
-                  key: "SHA256(HEX形式)",
-                  value: sha256hex
-                },
-                {
-                  key: "SHA256(Base64形式)",
-                  value: sha256base64
-                },
-                {
-                  key: "SHA512(HEX形式)",
-                  value: sha512hex
-                },
-                {
-                  key: "SHA512(Base64形式)",
-                  value: sha512base64
-                }
               ]
               t.loading = false
             }
@@ -200,40 +184,7 @@ export default Vue.extend({
       }
     },
     setNull: function () {
-      this.resultDataTableItems = [
-        {
-          key: "MD5(HEX形式)",
-          value: ""
-        },
-        {
-          key: "MD5(Base64形式)",
-          value: ""
-        },
-        {
-          key: "SHA1(HEX形式)",
-          value: ""
-        },
-        {
-          key: "SHA1(Base64形式)",
-          value: ""
-        },
-        {
-          key: "SHA256(HEX形式)",
-          value: ""
-        },
-        {
-          key: "SHA256(Base64形式)",
-          value: ""
-        },
-        {
-          key: "SHA512(HEX形式)",
-          value: ""
-        },
-        {
-          key: "SHA512(Base64形式)",
-          value: ""
-        }
-      ]
+      this.resultDataTableItems = []
       this.loading = false
     }
   }
