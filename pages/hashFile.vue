@@ -58,7 +58,7 @@ export default Vue.extend({
       {property: 'og:type', content: 'article'},
       {property: 'og:title', content: 'ファイルハッシュ化ツール'},
       {property: 'og:description', content: '入力されたファイルのmd5,sha1,sha256,sha512ハッシュをそれぞれHEX形式,Base64形式で出力します。'},
-      {property: 'og:url', content: 'https://www.nanananakam.com/hash/'},
+      {property: 'og:url', content: 'https://www.nanananakam.com/hashFile/'},
       //{ property: 'og:image', content: '{アイキャッチ画像の絶対URL}' },
       {name: 'twitter:card', content: 'summary'},
       //{ name: 'twitter:site', content: '@{Twitterユーザー名}' }
@@ -67,7 +67,7 @@ export default Vue.extend({
     link: [
       {
         rel: 'canonical',
-        href: 'https://www.nanananakam.com/hash/'
+        href: 'https://www.nanananakam.com/hashFile/'
       }
     ]
   },
