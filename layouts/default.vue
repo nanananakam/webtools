@@ -104,6 +104,12 @@ const pagesInfo: PageInfo[] = [
     text: "入力された文字列をmd5,sha1,sha256でハッシュ化し、HEX形式,Base64形式で出力します。"
   },
   {
+    icon: mdiArrowCollapseVertical,
+    title: "ファイルハッシュ化ツール",
+    to: '/hashFile/',
+    text: "入力されたファイルのmd5,sha1,sha256,sha512ハッシュをそれぞれHEX形式,Base64形式で出力します。。"
+  },
+  {
     icon: mdiFileArrowLeftRightOutline,
     title: "Base64ツール",
     to: '/base64/',
