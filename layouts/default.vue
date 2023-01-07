@@ -105,9 +105,9 @@ const pagesInfo: PageInfo[] = [
   },
   {
     icon: mdiArrowCollapseVertical,
-    title: "ファイルハッシュ化ツール",
+    title: "ファイルハッシュ確認ツール",
     to: '/hashFile/',
-    text: "入力されたファイルのmd5,sha1,sha256,sha512ハッシュをそれぞれHEX形式,Base64形式で出力します。。"
+    text: "入力されたファイルのmd5,sha1,sha256,sha512ハッシュをHEX形式またはBase64形式で出力します。"
   },
   {
     icon: mdiFileArrowLeftRightOutline,
