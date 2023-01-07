@@ -19,8 +19,8 @@
             :title="title"
             :description="title"
           >
-          </ShareNetwork>
           <v-icon large>{{ mdiTwitter }}</v-icon>
+          </ShareNetwork>
           <ShareNetwork
             network="facebook"
             :url="url"
